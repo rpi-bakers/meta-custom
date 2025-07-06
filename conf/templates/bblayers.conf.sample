@@ -1,0 +1,40 @@
+# POKY_BBLAYERS_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+POKY_BBLAYERS_CONF_VERSION = "2"
+
+BBPATH = "${TOPDIR}"
+BBFILES ?= ""
+
+# basic layers and my custom layer
+BBLAYERS ?= " \
+  ${TOPDIR}/../poky/meta \
+  ${TOPDIR}/../poky/meta-poky \
+  ${TOPDIR}/../poky/meta-yocto-bsp \
+  ${TOPDIR}/../meta-custom \
+"
+
+# raspberrypi
+BBLAYERS += " \
+  ${TOPDIR}/../meta-raspberrypi \
+  ${TOPDIR}/../meta-openembedded/meta-oe \
+"
+
+# samba
+BBLAYERS += " \
+  ${TOPDIR}/../meta-openembedded/meta-networking \
+  ${TOPDIR}/../meta-openembedded/meta-python \
+"
+
+# chicago95
+BBLAYERS += " \
+  ${TOPDIR}/../meta-openembedded/meta-xfce \
+  ${TOPDIR}/../meta-openembedded/meta-gnome \
+  ${TOPDIR}/../meta-openembedded/meta-multimedia \
+  ${TOPDIR}/../meta-openembedded/meta-initramfs \
+"
+
+# mono
+BBLAYERS += " \
+  ${TOPDIR}/../meta-mono \
+"
+

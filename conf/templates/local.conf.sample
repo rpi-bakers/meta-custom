@@ -1,0 +1,46 @@
+###############################################################################
+# Option settings.
+###############################################################################
+# You can set manually before running build.sh
+#BB_NUMBER_THREADS = '1'
+#PARALLEL_MAKE = '-j 1'
+BB_SERVER_TIMEOUT = "5"
+
+###############################################################################
+# Default settings.
+###############################################################################
+# If you change these settings, you may need to change other code as well.
+
+#------------------------------------------------------------------------------
+# vnc server settings for weston
+PACKAGECONFIG:append:pn-weston = " vnc"
+FILES:${PN}:append:pn-weston = " ${sysconfdir}/pam.d/weston-remote-access"
+PACKAGECONFIG:append:pn-neatvnc = " tls"
+
+#------------------------------------------------------------------------------
+LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
+
+#------------------------------------------------------------------------------
+DISTRO ?= "rpi-build"
+EXTRA_IMAGE_FEATURES ?= "debug-tweaks"
+USER_CLASSES ?= "buildstats"
+PATCHRESOLVE = "noop"
+BB_DISKMON_DIRS ??= "\
+    STOPTASKS,${TMPDIR},1G,100K \
+    STOPTASKS,${DL_DIR},1G,100K \
+    STOPTASKS,${SSTATE_DIR},1G,100K \
+    STOPTASKS,/tmp,100M,100K \
+    HALT,${TMPDIR},100M,1K \
+    HALT,${DL_DIR},100M,1K \
+    HALT,${SSTATE_DIR},100M,1K \
+    HALT,/tmp,10M,1K"
+
+PACKAGECONFIG:append:pn-qemu-system-native = " sdl"
+CONF_VERSION = "2"
+INHERIT+="toaster buildhistory"
+
+###############################################################################
+# env settings.
+###############################################################################
+# The settings in env.sh will be written by setup.sh　from this point.
+#

@@ -1,0 +1,83 @@
+From c3d99a0d0cb9534b927e468fe0a6b57558a3d9f7 Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Sun, 20 Jul 2025 16:02:39 +0900
+Subject: [PATCH] trace-cmd: Fix build with gcc-10
+
+    The build fails while building with gcc-10 with the error:
+    multiple definition of `common_type_field'
+
+    Rename the field in trace-hist.c and trace-mem.c to satisfy gcc-10.
+---
+ trace-hist.c | 8 ++++----
+ trace-mem.c  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/trace-hist.c b/trace-hist.c
+index dd5c8916..e537f276 100644
+--- a/trace-hist.c
++++ b/trace-hist.c
+@@ -41,7 +41,7 @@ static int kernel_stack_type;
+ 
+ static int long_size;
+ 
+-struct format_field *common_type_field;
++struct format_field *common_type_hist;
+ struct format_field *common_pid_field;
+ struct format_field *sched_wakeup_comm_field;
+ struct format_field *sched_wakeup_new_comm_field;
+@@ -497,7 +497,7 @@ process_record(struct pevent *pevent, struct pevent_record *record)
+ 	unsigned long long val;
+ 	int type;
+ 
+-	pevent_read_number_field(common_type_field, record->data, &val);
++	pevent_read_number_field(common_type_hist, record->data, &val);
+ 	type = val;
+ 
+ 	if (type == function_type)
+@@ -890,8 +890,8 @@ static void do_trace_hist(struct tracecmd_input *handle)
+ 
+ 	long_size = tracecmd_long_size(handle);
+ 
+-	common_type_field = pevent_find_common_field(event, "common_type");
+-	if (!common_type_field)
++	common_type_hist = pevent_find_common_field(event, "common_type");
++	if (!common_type_hist)
+ 		die("Can't find a 'type' field?");
+ 
+ 	common_pid_field = pevent_find_common_field(event, "common_pid");
+diff --git a/trace-mem.c b/trace-mem.c
+index a949b158..30f39efd 100644
+--- a/trace-mem.c
++++ b/trace-mem.c
+@@ -44,7 +44,7 @@ static int kmem_cache_alloc_type;
+ static int kmem_cache_alloc_node_type;
+ static int kmem_cache_free_type;
+ 
+-struct format_field *common_type_field;
++struct format_field *common_type_mem;
+ 
+ struct format_field *kmalloc_callsite_field;
+ struct format_field *kmalloc_bytes_req_field;
+@@ -383,7 +383,7 @@ process_record(struct pevent *pevent, struct pevent_record *record)
+ 	unsigned long long val;
+ 	int type;
+ 
+-	pevent_read_number_field(common_type_field, record->data, &val);
++	pevent_read_number_field(common_type_mem, record->data, &val);
+ 	type = val;
+ 
+ 	if (type == kmalloc_type)
+@@ -504,8 +504,8 @@ static void do_trace_mem(struct tracecmd_input *handle)
+ 	ret = pevent_data_type(pevent, record);
+ 	event = pevent_data_event_from_type(pevent, ret);
+ 
+-	common_type_field = pevent_find_common_field(event, "common_type");
+-	if (!common_type_field)
++	common_type_mem = pevent_find_common_field(event, "common_type");
++	if (!common_type_mem)
+ 		die("Can't find a 'type' field?");
+ 
+ 	update_kmalloc(pevent);
+-- 
+2.25.1
+

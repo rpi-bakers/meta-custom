@@ -1,0 +1,16 @@
+[Unit]
+Description=x11vnc (Remote access)
+After=wpa_supplicant@wlan0.service
+Requires=wpa_supplicant@wlan0.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/x11vnc
+# for passwort :ExecStart=/usr/bin/x11vnc -auth guess -display :0 -rfbauth /etc/.vncpasswd -rfbport 5900 -forever -loop -noxdamage -repeat -shared
+ExecStop=/bin/kill -TERM $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=control-group
+Restart=on-failure
+
+[Install]
+WantedBy=network-online.target

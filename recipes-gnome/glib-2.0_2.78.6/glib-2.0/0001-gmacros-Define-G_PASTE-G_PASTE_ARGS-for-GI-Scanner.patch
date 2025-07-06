@@ -1,0 +1,35 @@
+From 88da3a718dec87942feab04896590ed5ad5c8ade Mon Sep 17 00:00:00 2001
+From: Sebastian Wick <sebastian.wick@redhat.com>
+Date: Tue, 23 Jul 2024 12:19:32 +0200
+Subject: [PATCH] gmacros: Define G_PASTE/G_PASTE_ARGS for GI Scanner
+
+They are guarded for the GI Scanner right now even though they should be
+fine to expose and they are used in macros that are not guarded for the
+GI Scanner.
+
+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/glib/-/commit/88da3a718dec87942feab04896590ed5ad5c8ade]
+
+Signed-off-by: Sebastian Wick <sebastian.wick@redhat.com>
+---
+ glib/gmacros.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/glib/gmacros.h b/glib/gmacros.h
+index 3bc402849..bddc5af9d 100644
+--- a/glib/gmacros.h
++++ b/glib/gmacros.h
+@@ -861,9 +861,10 @@
+ #define G_STRINGIFY(macro_or_string)	G_STRINGIFY_ARG (macro_or_string)
+ #define	G_STRINGIFY_ARG(contents)	#contents
+ 
+-#ifndef __GI_SCANNER__ /* The static assert macro really confuses the introspection parser */
+ #define G_PASTE_ARGS(identifier1,identifier2) identifier1 ## identifier2
+ #define G_PASTE(identifier1,identifier2)      G_PASTE_ARGS (identifier1, identifier2)
++
++#ifndef __GI_SCANNER__ /* The static assert macro really confuses the introspection parser */
+ #if G_CXX_STD_CHECK_VERSION (11)
+ #define G_STATIC_ASSERT(expr) static_assert (expr, "Expression evaluates to false")
+ #elif (G_C_STD_CHECK_VERSION (11) || \
+-- 
+2.25.1
+

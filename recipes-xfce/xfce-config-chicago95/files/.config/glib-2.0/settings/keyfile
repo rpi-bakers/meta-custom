@@ -1,0 +1,7 @@
+[org/gnome/desktop/interface]
+gtk-theme='Chicago95'
+icon-theme='Chicago95'
+
+[org/gtk/settings/color-chooser]
+selected-color=(true, 0.0, 0.50196078431372548, 0.50196078431372548, 1.0)
+custom-colors=[(0.0, 0.50196078431372548, 0.50196078431372548, 1.0), (0.5, 0.5, 0.5, 1.0)]
