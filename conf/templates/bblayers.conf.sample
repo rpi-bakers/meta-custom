@@ -7,34 +7,39 @@ BBFILES ?= ""
 
 # basic layers and my custom layer
 BBLAYERS ?= " \
-  ${TOPDIR}/../poky/meta \
-  ${TOPDIR}/../poky/meta-poky \
-  ${TOPDIR}/../poky/meta-yocto-bsp \
-  ${TOPDIR}/../meta-custom \
+  %%SRC_DIR%%/poky/meta \
+  %%SRC_DIR%%/poky/meta-poky \
+  %%SRC_DIR%%/poky/meta-yocto-bsp \
+  %%SRC_DIR%%/meta-custom \
 "
 
 # raspberrypi
 BBLAYERS += " \
-  ${TOPDIR}/../meta-raspberrypi \
-  ${TOPDIR}/../meta-openembedded/meta-oe \
+  %%SRC_DIR%%/meta-raspberrypi \
+  %%SRC_DIR%%/meta-openembedded/meta-oe \
+"
+
+# Pironman 5 Series - NVMe M.2 SSD PCIe Mini PC Case for Raspberry Pi 5
+BBLAYERS += " \
+  %%SRC_DIR%%/meta-pironman5 \
 "
 
 # samba
 BBLAYERS += " \
-  ${TOPDIR}/../meta-openembedded/meta-networking \
-  ${TOPDIR}/../meta-openembedded/meta-python \
+  %%SRC_DIR%%/meta-openembedded/meta-networking \
+  %%SRC_DIR%%/meta-openembedded/meta-python \
 "
 
 # chicago95
 BBLAYERS += " \
-  ${TOPDIR}/../meta-openembedded/meta-xfce \
-  ${TOPDIR}/../meta-openembedded/meta-gnome \
-  ${TOPDIR}/../meta-openembedded/meta-multimedia \
-  ${TOPDIR}/../meta-openembedded/meta-initramfs \
+  %%SRC_DIR%%/meta-openembedded/meta-xfce \
+  %%SRC_DIR%%/meta-openembedded/meta-gnome \
+  %%SRC_DIR%%/meta-openembedded/meta-multimedia \
+  %%SRC_DIR%%/meta-openembedded/meta-initramfs \
 "
 
 # mono
 BBLAYERS += " \
-  ${TOPDIR}/../meta-mono \
+  %%SRC_DIR%%/meta-mono \
 "
 
