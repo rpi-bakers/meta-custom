@@ -1,3 +1,5 @@
+DISTRO_FEATURES:append = " wayland "
+
 IMAGE_INSTALL:append = " \
     weston \
     xwayland \

@@ -10,12 +10,11 @@ REQUIRED_DISTRO_FEATURES = "x11"
 
 QB_MEM = '${@bb.utils.contains("DISTRO_FEATURES", "opengl", "-m 512", "-m 256", d)}'
 
-###################################################################
-
 ###############################################################################
 # Japanese language support
 IMAGE_LINGUAS ?= "ja-jp ja-jp.euc-jp"
 GLIBC_GENERATE_LOCALES = "ja_JP.UTF-8 ja_JP.EUC-JP"
+
 ###############################################################################
 # ssh server settings
 IMAGE_FEATURES:append = " ssh-server-openssh"
@@ -77,6 +76,15 @@ IMAGE_INSTALL:append = " \
     ttf-sazanami-gothic \
     ttf-sazanami-mincho \
     setxkbmap \
+    \
+"
+
+###############################################################################
+# system monitoring tools
+IMAGE_INSTALL:append = " \
+    systemd-analyze \
+    htop \
+    i2c-tools \
     \
 "
 

@@ -21,7 +21,7 @@ PACKAGECONFIG:append:pn-neatvnc = " tls"
 LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
 
 #------------------------------------------------------------------------------
-DISTRO ?= "rpi-build"
+DISTRO ?= "pironman5"
 EXTRA_IMAGE_FEATURES ?= "debug-tweaks"
 USER_CLASSES ?= "buildstats"
 PATCHRESOLVE = "noop"

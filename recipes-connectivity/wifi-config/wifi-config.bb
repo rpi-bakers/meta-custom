@@ -17,6 +17,8 @@ do_install() {
                     ${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf
     sed -i 's|%%WIFI_PASSWORD%%|${WIFI_PASSWORD}|g' \
             "${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf"
+    sed -i 's|%%WIFI_SSID%%|${WIFI_SSID}|g' \
+            "${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf"
 
     # systemd-networkd config
     install -d ${D}${sysconfdir}/systemd/network
