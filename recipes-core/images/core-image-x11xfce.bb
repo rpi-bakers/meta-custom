@@ -10,7 +10,18 @@ REQUIRED_DISTRO_FEATURES = "x11"
 
 QB_MEM = '${@bb.utils.contains("DISTRO_FEATURES", "opengl", "-m 512", "-m 256", d)}'
 
-###################################################################
+###############################################################################
+# Enable pironman5 mini PC case support
+IMAGE_INSTALL:append = "${@bb.utils.contains('DISTRO_FEATURES', 'pironman5', \
+    ' \
+    python3-pironman5 \
+    python3-pm-auto \
+    python3-pm-dashboard \
+    python3-sf-rpi-status \
+    lgpio \
+    \
+    python3-gpiozero \
+', '', d)}"
 
 ###############################################################################
 # Japanese language support
