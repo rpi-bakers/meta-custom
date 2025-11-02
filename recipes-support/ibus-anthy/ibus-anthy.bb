@@ -44,6 +44,8 @@ S = "${WORKDIR}/git"
 ###############################################################################
 # Dependencies
 # -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
 # Directly: anthy, ibus
 # -----------------------------------------------------------------------------
 # Indirect
@@ -55,6 +57,22 @@ DEPENDS = " \
     ibus \
     python3-pygobject-native \
     qemu-native \
+"
+
+###############################################################################
+# runtime error:
+# -----------------------------------------------------------------------------
+# python3-pygobject -> gi
+#
+# Traceback (most recent call last):
+# File "/usr/share/ibus/setup/main.py", line 33, in <module>
+# File "/usr/share/ibus-anthy/engine/main.py", line 31, in <module>
+#   from gi import require_version as gi_require_version
+# ModuleNotFoundError: No module named 'gi'
+RDEPENDS:${PN} = " \
+    anthy \
+    ibus \
+    python3-pygobject \
 "
 
 ###############################################################################
@@ -113,6 +131,12 @@ do_install:append() {
            ${D}${datadir}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml
 
     ${STAGING_BINDIR_NATIVE}/glib-compile-schemas ${D}${datadir}/glib-2.0/schemas
+
+    # Set ibus environment variables.
+    install -d ${D}${sysconfdir}/profile.d
+    echo 'export GTK_IM_MODULE=ibus' >> ${D}${sysconfdir}/profile.d/ibus.sh
+    echo 'export QT_IM_MODULE=ibus' >> ${D}${sysconfdir}/profile.d/ibus.sh
+    echo 'export XMODIFIERS="@im=ibus"' >> ${D}${sysconfdir}/profile.d/ibus.sh
 }
 
 ###############################################################################
