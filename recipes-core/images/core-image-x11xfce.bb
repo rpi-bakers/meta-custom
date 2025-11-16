@@ -23,16 +23,10 @@ IMAGE_FEATURES:append = " ssh-server-openssh"
 PACKAGECONFIG:pn-openssh = "systemd-sshd-service-mode"
 
 IMAGE_INSTALL:append = " \
-    wpa-supplicant iw \
-    openssh openssh-sftp-server \
-    wifi-config \
-    x11vnc \
-    \
     xauth \
     \
     xeyes \
     xclock \
-    samba \
     xterm \
     \
     mono \
@@ -40,6 +34,36 @@ IMAGE_INSTALL:append = " \
     dotnet \
     gtk+ \
     \
+    xserver-xf86-config \
+"
+
+###############################################################################
+# Network services
+IMAGE_INSTALL:append = " \
+    wpa-supplicant iw \
+    openssh openssh-sftp-server \
+    wifi-config \
+    x11vnc \
+    samba \
+"
+
+###############################################################################
+# Japanese input method settings
+IMAGE_INSTALL:append = " \
+    ibus \
+    anthy \
+    ibus-anthy \
+    python3-pygobject \
+    \
+    ttf-vlgothic \
+    ttf-sazanami-gothic \
+    ttf-sazanami-mincho \
+    setxkbmap \
+"
+
+###############################################################################
+# Desktop theme settings
+IMAGE_INSTALL:append = " \
     xfce4-session \
     xfce4-terminal \
     xfwm4 \
@@ -67,16 +91,6 @@ IMAGE_INSTALL:append = " \
     xfce4-datetime-plugin \
     chicago95 \
     xfce-config-chicago95 \
-    \
-    ibus \
-    anthy \
-    ibus-anthy \
-    \
-    ttf-vlgothic \
-    ttf-sazanami-gothic \
-    ttf-sazanami-mincho \
-    setxkbmap \
-    \
 "
 
 ###############################################################################
