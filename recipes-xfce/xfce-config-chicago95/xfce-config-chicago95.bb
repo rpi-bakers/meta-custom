@@ -5,17 +5,16 @@ LIC_FILES_CHKSUM = ""
 SRC_URI += " \
     file://.config/ \
 "
-
-HOME = "/root"
+USER = "root"
+HOME = "/${USER}"
 
 do_install:append() {
     # Copy the configuration file to the image
-    install -d ${D}/${HOME}/.config
+    install -d ${D}${HOME}/.config
     cp -r ${WORKDIR}/.config ${D}/${HOME}/
-    chown -R root:root ${D}/${HOME}/.config/
+    chown -R ${USER}:${USER} ${D}/${HOME}/.config/
 }
 
 FILES:${PN} += " \
     ${HOME}/.config/ \
 "
-
