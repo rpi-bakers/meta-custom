@@ -43,3 +43,9 @@ BBLAYERS += " \
   %%SRC_DIR%%/meta-mono \
 "
 
+# browser
+BBLAYERS += " \
+  %%SRC_DIR%%/meta-browser/meta-chromium \
+  %%SRC_DIR%%/meta-clang \
+  %%SRC_DIR%%/meta-lts-mixins \
+"

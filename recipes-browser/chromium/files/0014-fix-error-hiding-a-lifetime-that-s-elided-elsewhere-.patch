@@ -1,0 +1,40 @@
+From ad24e560f07f30354e39e23ead09fecdcb8b0256 Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Sat, 13 Dec 2025 21:35:34 +0900
+Subject: [PATCH 1/2] fix error: hiding a lifetime that's elided elsewhere is
+ confusing
+
+---
+ .../rust/chromium_crates_io/vendor/qr_code-v2/src/lib.rs        | 2 +-
+ .../rust/chromium_crates_io/vendor/qr_code-v2/src/optimize.rs   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/lib.rs b/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/lib.rs
+index 1b729621c2..3dbdb496a7 100644
+--- a/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/lib.rs
++++ b/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/lib.rs
+@@ -216,7 +216,7 @@ impl QrCode {
+     }
+ 
+     /// Returns an iterator over QR code vector of colors.
+-    pub fn iter(&self) -> QrCodeIterator {
++    pub fn iter(&self) -> QrCodeIterator<'_> {
+         QrCodeIterator::new(self)
+     }
+ 
+diff --git a/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/optimize.rs b/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/optimize.rs
+index 26e99402cb..8a8bde9d3b 100644
+--- a/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/optimize.rs
++++ b/third_party/rust/chromium_crates_io/vendor/qr_code-v2/src/optimize.rs
+@@ -109,7 +109,7 @@ impl<'a> Parser<'a> {
+     ///                                Segment { mode: Numeric, begin: 3, end: 6 },
+     ///                                Segment { mode: Byte, begin: 6, end: 10 }]);
+     ///
+-    pub fn new(data: &[u8]) -> Parser {
++    pub fn new(data: &[u8]) -> Parser<'_> {
+         Parser {
+             ecs_iter: EcsIter {
+                 base: data.iter(),
+-- 
+2.43.0
+
