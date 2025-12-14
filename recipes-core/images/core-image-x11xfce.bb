@@ -35,6 +35,10 @@ IMAGE_INSTALL:append = " \
     gtk+ \
     \
     xserver-xf86-config \
+    bash-config \
+    \
+"
+
 ###############################################################################
 # graphics applications
 IMAGE_INSTALL:append = " \

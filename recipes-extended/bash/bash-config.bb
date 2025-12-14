@@ -6,7 +6,7 @@ SRC_URI += " \
     file://.bashrc \
 "
 
-DEPENDS = "chicago95"
+DEPENDS = "chicago95 ibus "
 
 USER = "root"
 HOME = "/${USER}"
@@ -20,6 +20,9 @@ do_install:append() {
 
     # DOS prompt like settings from chicago95
     echo "source ${datadir}/extras/DOSrc" >> ${D}${HOME}/.bashrc
+
+    # IBus environment variables
+    echo 'exec /usr/bin/ibus-daemon -rxRd &' >> ${D}${HOME}/.bashrc
 }
 
 FILES:${PN} += " \

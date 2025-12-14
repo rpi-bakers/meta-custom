@@ -137,7 +137,6 @@ do_install:append() {
     echo 'export GTK_IM_MODULE=ibus'            >> ${D}${sysconfdir}/profile.d/ibus.sh
     echo 'export QT_IM_MODULE=ibus'             >> ${D}${sysconfdir}/profile.d/ibus.sh
     echo 'export XMODIFIERS="@im=ibus"'         >> ${D}${sysconfdir}/profile.d/ibus.sh
-    echo 'exec /usr/bin/ibus-daemon -rxRd &'    >> ${D}${sysconfdir}/profile.d/ibus.sh
 }
 
 ###############################################################################
