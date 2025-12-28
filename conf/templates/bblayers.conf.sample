@@ -49,3 +49,8 @@ BBLAYERS += " \
   %%SRC_DIR%%/meta-clang \
   %%SRC_DIR%%/meta-lts-mixins \
 "
+
+# multimedia
+BBLAYERS += " \
+  %%SRC_DIR%%/meta-qt6 \
+"

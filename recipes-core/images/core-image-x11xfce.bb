@@ -28,11 +28,9 @@ IMAGE_INSTALL:append = " \
     xeyes \
     xclock \
     xterm \
-    \
-    mono \
-    mono-libs \
-    dotnet \
-    gtk+ \
+    vim \
+    audacious \
+    audacious-plugins \
     \
     xserver-xf86-config \
     bash-config \
@@ -110,6 +108,18 @@ IMAGE_INSTALL:append = " \
     htop \
     i2c-tools \
     \
+"
+
+###############################################################################
+# development tools
+IMAGE_INSTALL:append = " \
+    packagegroup-core-buildessential \
+    mono \
+    mono-libs \
+    dotnet \
+    gtk+ \
+    \
+    vim \
 "
 
 ###############################################################################

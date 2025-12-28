@@ -1,0 +1,80 @@
+
+[alsa]
+mixer=hw:2
+mixer-element=Speaker
+pcm=hw:2,0
+
+[audacious]
+chardet_detector=japanese
+equalizer_active=TRUE
+equalizer_bands=-7.2,-9.12,0,-8.639999,-6.24,0,4.32,0,-5.76,-5.28
+equalizer_preamp=-0.96
+use_qt=FALSE
+
+[audgui]
+about_win=665,356,582,307
+equalizer_win=807,372,298,288
+filesel_path=/root
+
+[audqt]
+equalizer_visible=TRUE
+theme=dark
+
+[filewriter]
+fileext=2
+
+[gtkui]
+column_widths=10,275,175,10,175,175,10,100,35,10,275,275,275,10,275,175,75,10
+player_x=168
+player_y=428
+
+[gtkui-layout]
+item0_name=Lyrics
+item0_pos=-1,812,413,280,184
+item1_name=Playlist Manager
+item1_pos=-1,904,61,280,184
+item2_name=Search Tool
+item2_pos=0,-1,-1,186,390
+item3_name=Album Art
+item3_pos=-1,0,0,280,184
+item4_name=Blur Scope
+item4_pos=-1,0,0,284,188
+item5_name=OpenGL Spectrum Analyzer
+item5_pos=-1,0,0,284,188
+item6_name=Spectrum Analyzer
+item6_pos=-1,0,0,284,188
+item7_name=VU Meter
+item7_pos=-1,0,0,284,188
+item_count=8
+
+[qtui]
+entry_count_visible=TRUE
+player_height=736
+player_width=1043
+playlist_headers_bold=TRUE
+playlist_tabs_visible=0
+show_remaining_time=TRUE
+
+[skins]
+double_size=TRUE
+equalizer_visible=TRUE
+equalizer_x=1301
+equalizer_y=284
+mainwin_font=Less Perfect DOS VGA 9
+player_x=1301
+player_y=52
+playlist_visible=TRUE
+playlist_x=1301
+playlist_y=516
+skin=/usr/share/audacious/Skins/Winamp2.9
+sticky=TRUE
+
+[skins-layout]
+albumart=0,606,287,193
+blur_scope=884,827,288,192
+cairo-spectrum=295,827,288,192
+gl-spectrum=590,827,288,192
+lyrics-gtk=590,607,288,192
+playlist-manager=0,475,288,102
+search-tool=295,606,288,192
+vumeter=0,827,288,192
