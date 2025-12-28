@@ -43,6 +43,7 @@ IMAGE_INSTALL:append = " \
 # graphics applications
 IMAGE_INSTALL:append = " \
     gimp \
+    opentabletdriver \
 "
 
 ###############################################################################
