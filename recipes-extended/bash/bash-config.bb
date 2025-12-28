@@ -23,9 +23,15 @@ do_install:append() {
 
     # IBus environment variables
     echo 'exec /usr/bin/ibus-daemon -rxRd &' >> ${D}${HOME}/.bashrc
+
+    # root home settings
+    # nvme directory link
+    ln -s /srv/apps ${D}${HOME}/apps
 }
 
 FILES:${PN} += " \
     ${HOME}/.bashrc \
+    ${HOME}/.xprofile \
+    ${HOME}/apps \
 "
 

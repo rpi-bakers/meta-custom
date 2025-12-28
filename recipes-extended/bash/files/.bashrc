@@ -112,3 +112,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# Custom key bindings for history search
+# Ctrl+n and Ctrl+p for searching history based on current input
+bind '"\C-n": history-search-forward'
+bind '"\C-p": history-search-backward'
+# arrow up key
+bind '"\e[A": history-search-backward'
+# arrow down key
+bind '"\e[B": history-search-forward'
