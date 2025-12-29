@@ -1,0 +1,11 @@
+[Unit]
+Description=OpenTabletDriver Daemon
+After=network.target graphical.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/otd-daemon
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
