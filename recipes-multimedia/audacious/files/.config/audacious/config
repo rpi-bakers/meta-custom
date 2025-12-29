@@ -67,7 +67,6 @@ playlist_visible=TRUE
 playlist_x=1301
 playlist_y=516
 skin=/usr/share/audacious/Skins/Winamp2.9
-sticky=TRUE
 
 [skins-layout]
 albumart=0,606,287,193
