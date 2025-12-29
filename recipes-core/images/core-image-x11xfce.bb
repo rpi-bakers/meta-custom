@@ -10,6 +10,9 @@ REQUIRED_DISTRO_FEATURES = "x11"
 
 QB_MEM = '${@bb.utils.contains("DISTRO_FEATURES", "opengl", "-m 512", "-m 256", d)}'
 
+# 10GB rootfs
+IMAGE_ROOTFS_SIZE = "10485760"
+
 ###############################################################################
 # Japanese language support
 IMAGE_LINGUAS ?= "ja-jp ja-jp.euc-jp"
