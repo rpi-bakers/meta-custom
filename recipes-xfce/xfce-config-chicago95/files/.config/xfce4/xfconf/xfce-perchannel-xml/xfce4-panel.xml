@@ -68,6 +68,7 @@
     <property name="plugin-6" type="string" value="systray">
       <property name="square-icons" type="bool" value="true"/>
       <property name="known-legacy-items" type="array">
+        <value type="string" value="audacious"/>
         <value type="string" value="ibus panel"/>
         <value type="string" value="ibus-ui-gtk3"/>
       </property>
@@ -104,6 +105,7 @@
     </property>
     <property name="plugin-20" type="string" value="launcher">
       <property name="items" type="array">
+        <value type="string" value="17669969471.desktop"/>
       </property>
     </property>
     <property name="plugin-21" type="string" value="separator"/>
