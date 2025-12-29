@@ -1,7 +1,3 @@
-# Recipe created by recipetool
-# This is the basis of a recipe and may need further editing in order to be fully functional.
-# (Feel free to remove these comments when editing.)
-
 SUMMARY = "OpenTabletDriver - Open source user mode tablet driver"
 HOMEPAGE = "https://opentabletdriver.net/"
 LICENSE = "LGPL-3.0-only"
@@ -29,7 +25,6 @@ FILES:${PN} += " \
 	/usr/local/ \
 	/etc/udev/70-opentabletdriver.rules \
 "
-
 
 # Skip QA check for already-stripped binaries
 INSANE_SKIP:${PN} += "already-stripped"

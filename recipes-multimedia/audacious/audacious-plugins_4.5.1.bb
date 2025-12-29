@@ -41,10 +41,6 @@ inherit pkgconfig gettext autotools-brokensep
 # Qt6 configuration.
 EXTRA_OECONF += " --disable-opus --disable-wavpack --disable-neon --disable-qtglspectrum"
 
-# Ensure Qt tools (rcc etc.) are found from the native recipe sysroot
-# rcc is installed into ${RECIPE_SYSROOT_NATIVE}/usr/libexec
-#EXTRA_OEMAKE += " QT_BINPATH=${RECIPE_SYSROOT_NATIVE}/usr/libexec"
-
 # Ship all audacious plugins and bundled skins
 FILES:${PN} += " \
     ${libdir}/audacious \
