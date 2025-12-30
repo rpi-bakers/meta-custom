@@ -1,10 +1,22 @@
 ###############################################################################
 # Option settings.
 ###############################################################################
-# You can set manually before running build.sh
+# You can set manually before running build.sh.
+
+#------------------------------------------------------------------------------
+# Set build parallel numbers. (If you want reduce CPU loads.)
 #BB_NUMBER_THREADS = '1'
 #PARALLEL_MAKE = '-j 1'
 BB_SERVER_TIMEOUT = "5"
+
+#------------------------------------------------------------------------------
+# Extra rootfs size you want.
+# 1GB example:
+# IMAGE_ROOTFS_EXTRA_SPACE:pn-core-image-x11xfce = "1048576"
+# 2GB example:
+# IMAGE_ROOTFS_EXTRA_SPACE:pn-core-image-x11xfce = "2097152"
+# 4GB example:
+# IMAGE_ROOTFS_EXTRA_SPACE:pn-core-image-x11xfce = "4194304"
 
 ###############################################################################
 # Default settings.
