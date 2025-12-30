@@ -85,6 +85,8 @@ IMAGE_INSTALL:append = " \
     xfdesktop \
     xfce4-notifyd \
     exo \
+    imsettings \
+    pavucontrol \
     \
     xfce4-panel-plugin-actions \
     xfce4-panel-plugin-applicationsmenu \
@@ -97,6 +99,10 @@ IMAGE_INSTALL:append = " \
     xfce4-panel-plugin-systray \
     xfce4-panel-plugin-tasklist \
     xfce4-panel-plugin-windowmenu \
+    xfce4-pulseaudio-plugin \
+    xfce4-sensors-plugin \
+    xfce4-cpufreq-plugin \
+    xfce4-mount-plugin \
     \
     xfce4-whiskermenu-plugin \
     xfce4-datetime-plugin \

@@ -1,0 +1,17 @@
+[General]
+Lines_Size=1
+Preferred_Height=454
+Number_Chips=1
+
+[Chip0]
+Name=ACPI
+Number=0
+
+[Chip0_Feature0]
+Address=0
+Name=temp
+Color=#0000B0
+Show=true
+Min=20
+Max=60
+
