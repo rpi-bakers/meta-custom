@@ -26,6 +26,9 @@ RDEPENDS:${PN} = " \
 # So autotools-brokensep is used as autotools.
 inherit pkgconfig gettext mime-xdg autotools-brokensep
 
+# "make clean" in this tree is fragile, so just skip it.
+CLEANBROKEN = "1"
+
 # Specify any options you want to pass to the configure script using EXTRA_OECONF:
 EXTRA_OECONF = ""
 

@@ -264,7 +264,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/crystalizer.so
 stamp 1520598896
 version 48
@@ -274,7 +274,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/compressor.so
 stamp 1520598896
 version 48
@@ -284,7 +284,7 @@ domain audacious-plugins
 priority 0
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/echo.so
 stamp 1520598896
 version 48
@@ -294,7 +294,7 @@ domain audacious-plugins
 priority 0
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/stereo.so
 stamp 1520598896
 version 48
@@ -304,7 +304,7 @@ domain audacious-plugins
 priority 0
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/ladspa.so
 stamp 1520598896
 version 48
@@ -314,7 +314,7 @@ domain audacious-plugins
 priority 0
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/silence-removal.so
 stamp 1520598896
 version 48
@@ -324,7 +324,7 @@ domain audacious-plugins
 priority 0
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/voice_removal.so
 stamp 1520598896
 version 48
@@ -334,7 +334,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 0
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/mixer.so
 stamp 1520598896
 version 48
@@ -344,7 +344,7 @@ domain audacious-plugins
 priority 2
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/crossfade.so
 stamp 1520598896
 version 48
@@ -354,7 +354,7 @@ domain audacious-plugins
 priority 5
 about 1
 config 1
-enabled 1
+enabled 0
 effect /usr/lib/audacious/Effect/background_music.so
 stamp 1520598896
 version 48
@@ -364,7 +364,7 @@ domain audacious-plugins
 priority 10
 about 1
 config 1
-enabled 1
+enabled 0
 output /usr/lib/audacious/Output/pulse_audio.so
 stamp 1520598896
 version 48
