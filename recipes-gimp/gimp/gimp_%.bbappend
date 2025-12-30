@@ -4,7 +4,7 @@ SRC_URI += " \
     file://.config/ \
 "
 
-do_install(){
+do_install:append(){
     # Copy the configuration file for tablet support
     install -d ${D}${HOME}/.config
     cp -r ${WORKDIR}/.config ${D}/${HOME}/
