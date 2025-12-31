@@ -31,6 +31,7 @@ do_install() {
     cp -r ${S}/Fonts/bitmap/cronyx-cyrillic ${D}${datadir}/fonts/
     cp -r ${S}/Plymouth/Chicago95 ${D}${datadir}/plymouth/themes/
     cp -r ${S}/Plymouth/RetroTux ${D}${datadir}/plymouth/themes/
+    cp -r ${S}/sounds/Chicago95 ${D}${datadir}/sounds/
 }
 
 FILES:${PN} += " \
@@ -39,4 +40,5 @@ FILES:${PN} += " \
     ${datadir}/fonts/ \
     ${datadir}/extras/ \
     ${datadir}/plymouth/themes/ \
+    ${datadir}/sounds/Chicago95/ \
 "
