@@ -80,6 +80,9 @@ IMAGE_INSTALL:append = " \
     thunar \
     thunar-volman \
     xfdesktop \
+    gsettings-desktop-schemas \
+    glib-2.0-utils \
+    gvfs \
     xfce4-notifyd \
     exo \
     imsettings \

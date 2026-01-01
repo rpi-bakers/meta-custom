@@ -23,6 +23,9 @@ inherit pkgconfig
 # ERROR: ibus-anthy-1.0-r0 do_configure: Fatal QA errors were found, failing task.
 inherit gettext
 
+# Let Yocto manage GSettings schema compilation timing (rootfs build / pkg install)
+inherit gsettings
+
 # ERROR: ibus-anthy-1.0-r0 do_package: QA Issue:
 #        ibus-anthy: Files/directories were installed but not shipped in any package:
 #  /usr/share/icons
@@ -130,8 +133,6 @@ do_install:append() {
     cp ${STAGING_DATADIR}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml \
            ${D}${datadir}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml
 
-    ${STAGING_BINDIR_NATIVE}/glib-compile-schemas ${D}${datadir}/glib-2.0/schemas
-
     # Set ibus environment variables.
     install -d ${D}${sysconfdir}/profile.d
     echo 'export GTK_IM_MODULE=ibus'            >> ${D}${sysconfdir}/profile.d/ibus.sh
@@ -153,5 +154,4 @@ FILES:${PN} += " \
     ${datadir}/ibus/component/anthy.xml \
     ${datadir}/glib-2.0/schemas/org.freedesktop.ibus.engine.anthy.gschema.xml \
     ${datadir}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml \
-    ${datadir}/glib-2.0/schemas/gschemas.compiled \
 "
