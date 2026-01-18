@@ -25,6 +25,7 @@ PACKAGECONFIG:pn-openssh = "systemd-sshd-service-mode"
 IMAGE_INSTALL:append = " \
     xauth \
     \
+    sl \
     xeyes \
     xclock \
     xterm \
