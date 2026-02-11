@@ -1,3 +1,6 @@
+# Enable Xwayland for x11 applications
+PACKAGECONFIG:append: = " xwayland"
 
-PACKAGECONFIG:append: = " xwayland vnc"
+# Enable VNC support
+PACKAGECONFIG:append: = " vnc"
 FILES:${PN}:append: = " ${sysconfdir}/pam.d/weston-remote-access"

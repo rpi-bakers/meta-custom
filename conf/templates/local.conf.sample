@@ -24,12 +24,6 @@ BB_SERVER_TIMEOUT = "5"
 # If you change these settings, you may need to change other code as well.
 
 #------------------------------------------------------------------------------
-# vnc server settings for weston
-PACKAGECONFIG:append:pn-weston = " vnc"
-FILES:${PN}:append:pn-weston = " ${sysconfdir}/pam.d/weston-remote-access"
-PACKAGECONFIG:append:pn-neatvnc = " tls"
-
-#------------------------------------------------------------------------------
 LICENSE_FLAGS_ACCEPTED = "synaptics-killswitch"
 
 #------------------------------------------------------------------------------
