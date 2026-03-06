@@ -4,7 +4,7 @@ IMAGE_FEATURES += "splash package-management x11"
 
 LICENSE = "MIT"
 
-inherit core-image features_check
+inherit core-image
 
 QB_MEM = '${@bb.utils.contains("DISTRO_FEATURES", "opengl", "-m 512", "-m 256", d)}'
 

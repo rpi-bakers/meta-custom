@@ -22,6 +22,7 @@ USERADD_PARAM:${PN} = " \
     --shell /bin/sh \
     --user-group -G video,input,render,wayland \
     -p '${WESTONPASSWD}' \
+    -u 2000 \
     weston \
 "
 
