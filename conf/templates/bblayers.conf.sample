@@ -54,3 +54,8 @@ BBLAYERS += " \
 BBLAYERS += " \
   %%SRC_DIR%%/meta-qt6 \
 "
+
+# java
+BBLAYERS += " \
+  %%SRC_DIR%%/meta-openjdk-temurin \
+"

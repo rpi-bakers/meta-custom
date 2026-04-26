@@ -33,6 +33,7 @@ IMAGE_INSTALL:append = " \
     \
     xserver-xf86-config \
     bash-config \
+    helloworld-java \
     \
 "
 
