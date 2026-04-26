@@ -1,6 +1,6 @@
 SUMMARY = "A very basic X11 image with a terminal + xfce"
 
-IMAGE_FEATURES += "splash package-management x11"
+IMAGE_FEATURES += "splash package-management x11-base"
 
 LICENSE = "MIT"
 
