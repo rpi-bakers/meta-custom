@@ -48,5 +48,5 @@ INHERIT+="toaster buildhistory"
 ###############################################################################
 # env settings.
 ###############################################################################
-# The settings in env.sh will be written by setup.sh　from this point.
+# The settings in env.sh will be written by setup.sh from this point.
 #
