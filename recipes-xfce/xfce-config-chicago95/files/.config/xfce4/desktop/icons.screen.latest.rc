@@ -10,32 +10,32 @@ row=0
 col=1
 
 [/root/Desktop/vim.desktop]
-row=6
-col=0
+row=0
+col=3
 
 [/root/Desktop/opentabletdriver.desktop]
-row=8
-col=0
+row=2
+col=2
 
 [/root/Desktop/gimp.desktop]
-row=3
-col=0
+row=1
+col=3
 
 [/root/Desktop/chromium.desktop]
-row=7
-col=0
+row=0
+col=2
 
 [/root/Desktop/xfce4-terminal-emulator.desktop]
 row=1
 col=1
 
 [/root/Desktop/gvim.desktop]
-row=5
-col=0
+row=1
+col=2
 
 [/root/Desktop/audacious.desktop]
-row=4
-col=0
+row=2
+col=3
 
 [Trash]
 row=0

@@ -23,6 +23,7 @@ do_install() {
     install -d ${D}${datadir}/fonts
     install -d ${D}${datadir}/extras
     install -d ${D}${datadir}/plymouth/themes
+    install -d ${D}${datadir}/sounds/
     cp -r ${S}/Theme/Chicago95 ${D}${datadir}/themes/
     cp -r ${S}/Icons/* ${D}${datadir}/icons/
     cp -r ${S}/Cursors/* ${D}${datadir}/icons/
@@ -35,7 +36,7 @@ do_install() {
 }
 
 FILES:${PN} += " \
-    ${datadir}/themes/Chicago95 \
+    ${datadir}/themes/Chicago95/ \
     ${datadir}/icons/ \
     ${datadir}/fonts/ \
     ${datadir}/extras/ \
