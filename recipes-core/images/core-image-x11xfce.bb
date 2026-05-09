@@ -52,7 +52,6 @@ IMAGE_INSTALL:append = " \
     wifi-config \
     x11vnc \
     samba \
-    chromium-x11 \
 "
 
 ###############################################################################
@@ -138,3 +137,9 @@ PREFERRED_PROVIDER_virtual/psplash = "plymouth"
 IMAGE_INSTALL:append = " \
     plymouth \
 "
+
+###############################################################################
+# web browser : cautuion: chromium is very large size and build time is long.
+#IMAGE_INSTALL:append = " \
+#    chromium-x11 \
+#"
