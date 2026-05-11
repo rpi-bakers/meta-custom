@@ -33,8 +33,14 @@ IMAGE_INSTALL:append = " \
     \
     xserver-xf86-config \
     bash-config \
-    helloworld-java \
     \
+"
+
+###############################################################################
+# skeleton applications
+IMAGE_INSTALL:append = " \
+    helloworld-java \
+    helloworld-python \
 "
 
 ###############################################################################
