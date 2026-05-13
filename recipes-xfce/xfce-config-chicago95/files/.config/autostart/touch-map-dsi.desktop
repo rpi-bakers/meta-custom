@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Touch Map DSI
+Comment=Map FT5x06 touch input to DSI output
+Exec=/bin/sh -c '/root/.local/bin/map-touch-to-dsi.sh'
+OnlyShowIn=XFCE;
+StartupNotify=false
+Terminal=false
+Hidden=false

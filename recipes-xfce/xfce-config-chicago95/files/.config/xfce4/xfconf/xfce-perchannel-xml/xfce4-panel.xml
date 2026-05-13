@@ -19,8 +19,6 @@
         <value type="int" value="5"/>
         <value type="int" value="6"/>
         <value type="int" value="9"/>
-        <value type="int" value="13"/>
-        <value type="int" value="24"/>
         <value type="int" value="12"/>
       </property>
       <property name="background-style" type="uint" value="0"/>
@@ -29,7 +27,7 @@
     </property>
     <property name="panel-2" type="empty">
       <property name="autohide-behavior" type="uint" value="1"/>
-      <property name="position" type="string" value="p=1;x=1802;y=1509"/>
+      <property name="position" type="string" value="p=1;x=672;y=429"/>
       <property name="length" type="double" value="1"/>
       <property name="position-locked" type="bool" value="false"/>
       <property name="size" type="uint" value="32"/>
@@ -78,10 +76,6 @@
     <property name="plugin-12" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
     </property>
-    <property name="plugin-13" type="string" value="separator">
-      <property name="style" type="uint" value="0"/>
-      <property name="expand" type="bool" value="false"/>
-    </property>
     <property name="plugin-15" type="string" value="showdesktop"/>
     <property name="plugin-16" type="string" value="separator"/>
     <property name="plugin-17" type="string" value="launcher">
@@ -112,6 +106,5 @@
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
     </property>
-    <property name="plugin-24" type="string" value="separator"/>
   </property>
 </channel>

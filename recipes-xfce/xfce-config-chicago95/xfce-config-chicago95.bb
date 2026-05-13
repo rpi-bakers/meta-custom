@@ -26,10 +26,16 @@ do_install:append() {
     install -d ${D}${HOME}/.local
     cp -r ${WORKDIR}/.local ${D}/${HOME}/
     chown -R ${USER}:${USER} ${D}/${HOME}/.local
+    chmod 0755 ${D}/${HOME}/.local/bin/map-touch-to-dsi.sh
 }
 
 FILES:${PN} += " \
     ${HOME}/.config/ \
     ${HOME}/Desktop/ \
     ${HOME}/.local/ \
+"
+
+RDEPENDS:${PN} += " \
+    xinput \
+    xrandr \
 "
