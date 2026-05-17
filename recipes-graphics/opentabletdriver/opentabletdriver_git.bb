@@ -20,10 +20,14 @@ SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 
 DEPENDS = "dotnet libx11 libxrandr libevdev gtk+3 jq"
 
+OTD_RUNTIME:aarch64 = "linux-arm64"
+OTD_RUNTIME:arm = "linux-arm"
+OTD_RUNTIME ?= "linux-arm"
+
 # Install dependencies and build
 do_compile() {
     export PATH="/usr/bin:$PATH"
-    ./eng/linux/package.sh --package BinaryTarBall --runtime linux-arm64
+    ./eng/linux/package.sh --package BinaryTarBall --runtime ${OTD_RUNTIME}
 }
 
 do_install:append() {

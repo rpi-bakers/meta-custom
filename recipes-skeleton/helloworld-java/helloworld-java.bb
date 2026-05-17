@@ -9,8 +9,8 @@ SRC_URI = " \
 
 S = "${WORKDIR}"
 
-DEPENDS += "openjdk-25-jdk-native"
-RDEPENDS:${PN} += "openjdk-25-jre"
+DEPENDS += "openjdk-17-jdk-native"
+RDEPENDS:${PN} += "openjdk-17-jre"
 
 do_compile() {
     # Compile java code.
