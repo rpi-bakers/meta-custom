@@ -424,7 +424,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 1
-enabled 1
+enabled 0
 vis /usr/lib/audacious/Visualization/gl-spectrum.so
 stamp 1520598896
 version 48
@@ -434,7 +434,7 @@ domain audacious-plugins
 priority 0
 about 1
 config 0
-enabled 1
+enabled 0
 vis /usr/lib/audacious/Visualization/cairo-spectrum.so
 stamp 1520598896
 version 48
@@ -494,7 +494,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 0
-enabled 1
+enabled 0
 general /usr/lib/audacious/General/aosd.so
 stamp 1520598896
 version 48
@@ -544,7 +544,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 1
-enabled 1
+enabled 0
 general /usr/lib/audacious/General/lyrics-qt.so
 stamp 1520598896
 version 48
@@ -584,7 +584,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 0
-enabled 1
+enabled 0
 general /usr/lib/audacious/General/search-tool-qt.so
 stamp 1520598896
 version 48
@@ -604,7 +604,7 @@ domain audacious-plugins
 priority 0
 about 0
 config 1
-enabled 1
+enabled 0
 general /usr/lib/audacious/General/song_change.so
 stamp 1520598896
 version 48

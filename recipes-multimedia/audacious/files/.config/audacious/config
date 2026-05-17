@@ -56,24 +56,24 @@ playlist_tabs_visible=0
 show_remaining_time=TRUE
 
 [skins]
-double_size=TRUE
 equalizer_visible=TRUE
-equalizer_x=1301
-equalizer_y=284
+equalizer_x=525
+equalizer_y=132
 mainwin_font=Less Perfect DOS VGA 9
-player_x=1301
-player_y=52
+player_x=525
+player_y=16
+playlist_height=174
 playlist_visible=TRUE
-playlist_x=1301
-playlist_y=516
+playlist_x=525
+playlist_y=248
 skin=/usr/share/audacious/Skins/Winamp2.9
 
 [skins-layout]
-albumart=0,606,287,193
-blur_scope=884,827,288,192
-cairo-spectrum=295,827,288,192
-gl-spectrum=590,827,288,192
-lyrics-gtk=590,607,288,192
-playlist-manager=0,475,288,102
-search-tool=295,606,288,192
-vumeter=0,827,288,192
+albumart=0,259,287,193
+blur_scope=504,260,288,192
+cairo-spectrum=161,273,288,146
+gl-spectrum=504,260,288,192
+lyrics-gtk=504,260,288,192
+playlist-manager=0,317,288,102
+search-tool=295,260,288,192
+vumeter=0,268,152,151
