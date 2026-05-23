@@ -59,3 +59,10 @@ BBLAYERS += " \
 BBLAYERS += " \
   ##OEROOT##/../meta-openjdk-temurin \
 "
+
+# Hailo AI (official meta-hailo Yocto integration)
+BBLAYERS += " \
+  ##OEROOT##/../meta-hailo/meta-hailo-accelerator \
+  ##OEROOT##/../meta-hailo/meta-hailo-libhailort \
+  ##OEROOT##/../meta-hailo/meta-hailo-tappas \
+"

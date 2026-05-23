@@ -124,6 +124,31 @@ IMAGE_INSTALL:append = " \
     \
 "
 
+################################################################################
+# HailoRT
+IMAGE_INSTALL:append = " \
+    libhailort \
+    hailortcli \
+    pyhailort \
+    libgsthailo \
+    hailo-pci \
+    hailo-firmware \
+"
+
+################################################################################
+# Tappas
+IMAGE_INSTALL:append = " \
+    libgsthailotools \
+    hailo-post-processes \
+    tappas-tracers \
+"
+
+###############################################################################
+# Hailo AI + Raspberry Pi camera Demo Apps
+IMAGE_INSTALL:append = " \
+    hailo-ai-demo-scripts \
+"
+
 ###############################################################################
 # development tools
 IMAGE_INSTALL:append = " \
