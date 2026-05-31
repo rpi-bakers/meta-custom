@@ -9,6 +9,10 @@ SRC_URI = " \
 
 S = "${WORKDIR}"
 
+RDEPENDS:${PN} += " \
+    libcamera-apps \
+"
+
 do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${WORKDIR}/hailo-ai-smoke-test ${D}${bindir}/hailo-ai-smoke-test

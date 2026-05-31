@@ -121,6 +121,8 @@ IMAGE_INSTALL:append = " \
     systemd-analyze \
     htop \
     i2c-tools \
+    v4l-utils \
+    gdb \
     \
 "
 
@@ -147,8 +149,11 @@ IMAGE_INSTALL:append = " \
 # Hailo AI + Raspberry Pi camera Demo Apps
 IMAGE_INSTALL:append = " \
     hailo-ai-demo-scripts \
+    libcamera-apps \
 "
 
+#    qtbase \
+#    qtbase-plugins \
 ###############################################################################
 # development tools
 IMAGE_INSTALL:append = " \

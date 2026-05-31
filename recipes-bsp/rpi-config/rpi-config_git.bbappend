@@ -4,6 +4,9 @@ ENABLE_DSI_DISPLAY ??= "0"
 DSI_OVERLAY ??= "vc4-kms-dsi-7inch"
 DSI_PORT ??= ""
 ENABLE_DUAL_DISPLAY ??= "0"
+ENABLE_CAMERA ??= "1"
+CAMERA_AUTO_DETECT ??= "1"
+CAMERA_OVERLAY ??= "ov5647"
 
 do_deploy:append:raspberrypi5() {
     if [ "${ENABLE_UART}" = "1" ] ; then
@@ -27,5 +30,13 @@ do_deploy:append:raspberrypi5() {
             echo "max_framebuffers=1" >> $CONFIG
         fi
         echo "dtoverlay=${DSI_OVERLAY}" >> $CONFIG
+    fi
+
+    if [ "${ENABLE_CAMERA}" = "1" ] ; then
+        echo "# enable camera stack" >> $CONFIG
+        echo "camera_auto_detect=${CAMERA_AUTO_DETECT}" >> $CONFIG
+        if [ -n "${CAMERA_OVERLAY}" ] ; then
+            echo "dtoverlay=${CAMERA_OVERLAY}" >> $CONFIG
+        fi
     fi
 }
