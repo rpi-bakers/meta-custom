@@ -12,9 +12,19 @@ if ! command -v hailortcli >/dev/null 2>&1; then
     exit 1
 fi
 
+echo ""
 echo "[1/3] Identify Hailo device"
+
+echo "------------------------------"
+echo "hailortcli fw-control identify"
 hailortcli fw-control identify
 
+
+echo "------------------------------"
+echo "lspci | grep -i hailo"
+lspci | grep -i hailo
+
+echo "---------------------------------------------------"
 echo "[1.5/3] Validate Hailo GStreamer plugins (optional)"
 if command -v gst-inspect-1.0 >/dev/null 2>&1; then
     if gst-inspect-1.0 | grep -q "hailo"; then
@@ -25,20 +35,25 @@ if command -v gst-inspect-1.0 >/dev/null 2>&1; then
         echo "Install libgsthailo / libgsthailotools / hailo-post-processes if needed."
     fi
 
+        echo "-----------------------------------"
     if [ -d /usr/lib/hailo-post-processes ]; then
         echo "Found /usr/lib/hailo-post-processes"
     fi
 fi
 
+echo "------------------------------"
 echo "[2/3] Benchmark"
+
 if [ -f "${MODEL_PATH}" ]; then
     hailortcli benchmark "${MODEL_PATH}"
 else
+    echo "---------------------------------------"
     echo "Model file was not found: ${MODEL_PATH}"
     echo "Install model package and rerun with:"
     echo "  hailo-ai-smoke-test /path/to/model.hef"
 fi
 
+echo "------------------------------"
 echo "[3/3] rpicam command examples"
 echo "If connected over SSH, export display first:"
 echo "  export DISPLAY=:0.0"
