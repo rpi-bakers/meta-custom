@@ -1,0 +1,10 @@
+prefix=
+exec_prefix=
+libdir=
+includedir=
+
+Name: HailoRT
+Description: HailoRT C API
+Version:
+Libs: -L${libdir} -lhailort
+Cflags: -I${includedir}

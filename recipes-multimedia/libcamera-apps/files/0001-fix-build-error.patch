@@ -1,0 +1,121 @@
+From faadbf311ee7f03e51d29bd8c7bff94d4d39b487 Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Wed, 12 Aug 2026 17:28:09 +0900
+Subject: [PATCH] fix build error
+
+---
+ .../hailo/hailo_postprocessing_stage.cpp      | 25 ++++++++++++++++---
+ post_processing_stages/hailo/hailo_scrfd.cpp  | 16 ++++++------
+ preview/meson.build                           |  5 +++-
+ 3 files changed, 33 insertions(+), 13 deletions(-)
+
+diff --git a/post_processing_stages/hailo/hailo_postprocessing_stage.cpp b/post_processing_stages/hailo/hailo_postprocessing_stage.cpp
+index 6441e63..4d05660 100644
+--- a/post_processing_stages/hailo/hailo_postprocessing_stage.cpp
++++ b/post_processing_stages/hailo/hailo_postprocessing_stage.cpp
+@@ -334,18 +334,35 @@ HailoROIPtr HailoPostProcessingStage::MakeROI(const std::vector<OutTensor> &outp
+ 	for (auto const &t : output_tensors)
+ 	{
+ 		hailo_vstream_info_t info;
++		hailo_tensor_metadata_t tensor_meta{};
+ 
+ 		strncpy(info.name, t.name.c_str(), sizeof(info.name));
+ 		// To keep GCC quiet...
+-		info.name[HAILO_MAX_STREAM_NAME_SIZE - 1] = '\0';
++		info.name[HAILO_MAX_STREAM_NAME_SIZE - 1] = "\0"[0];
+ 		info.format = t.format;
+ 		info.quant_info = t.quant_info;
+-		if (HailoRTCommon::is_nms(info))
++
++		strncpy(tensor_meta.name, info.name, sizeof(tensor_meta.name));
++		tensor_meta.name[HAILO_MAX_STREAM_NAME_SIZE - 1] = "\0"[0];
++		tensor_meta.format.type = static_cast<HailoTensorFormatType>(info.format.type);
++		tensor_meta.format.is_nms = HailoRTCommon::is_nms(info);
++		tensor_meta.quant_info.qp_zp = info.quant_info.qp_zp;
++		tensor_meta.quant_info.qp_scale = info.quant_info.qp_scale;
++		tensor_meta.quant_info.limvals_min = info.quant_info.limvals_min;
++		tensor_meta.quant_info.limvals_max = info.quant_info.limvals_max;
++
++		if (tensor_meta.format.is_nms)
++		{
+ 			info.nms_shape = infer_model_->outputs()[0].get_nms_shape().release();
++			tensor_meta.nms_shape.number_of_classes = info.nms_shape.number_of_classes;
++			tensor_meta.nms_shape.max_bboxes_per_class = info.nms_shape.max_bboxes_per_class;
++			tensor_meta.nms_shape.max_bboxes_total = info.nms_shape.max_bboxes_total;
++			tensor_meta.nms_shape.max_accumulated_mask_size = info.nms_shape.max_accumulated_mask_size;
++		}
+ 		else
+-			info.shape = t.shape;
++			tensor_meta.shape = { t.shape.height, t.shape.width, t.shape.features };
+ 
+-		roi->add_tensor(std::make_shared<HailoTensor>(t.data.get(), info));
++		roi->add_tensor(std::make_shared<HailoTensor>(t.data.get(), tensor_meta));
+ 	}
+ 
+ 	return roi;
+diff --git a/post_processing_stages/hailo/hailo_scrfd.cpp b/post_processing_stages/hailo/hailo_scrfd.cpp
+index 0c66ba8..9c0e14f 100644
+--- a/post_processing_stages/hailo/hailo_scrfd.cpp
++++ b/post_processing_stages/hailo/hailo_scrfd.cpp
+@@ -50,7 +50,7 @@ std::vector<std::string> LANDMARKS { "scrfd_2_5g/conv44", "scrfd_2_5g/conv51", "
+ //******************************************************************
+ // BOX/LANDMARK DECODING
+ //******************************************************************
+-xt::xarray<float> decode_landmarks_scrfd(const xt::xarray<float> &landmark_detections, const xt::xarray<float> &anchors)
++[[maybe_unused]] xt::xarray<float> decode_landmarks_scrfd(const xt::xarray<float> &landmark_detections, const xt::xarray<float> &anchors)
+ {
+ 	// Decode the boxes relative to their anchors.
+ 	// There are 5 landmarks paired in sets of 2 (x and y values),
+@@ -61,7 +61,7 @@ xt::xarray<float> decode_landmarks_scrfd(const xt::xarray<float> &landmark_detec
+ 	return landmarks;
+ }
+ 
+-xt::xarray<float> decode_boxes_scrfd(const xt::xarray<float> &box_detections, const xt::xarray<float> &anchors)
++[[maybe_unused]] xt::xarray<float> decode_boxes_scrfd(const xt::xarray<float> &box_detections, const xt::xarray<float> &anchors)
+ {
+ 	// Initalize the boxes matrix at the expected size
+ 	xt::xarray<float> boxes = xt::zeros<float>(box_detections.shape());
+@@ -89,18 +89,18 @@ detect_decode_branch(std::map<std::string, HailoTensorPtr> &tensors, const xt::x
+ 	// Filter and dequantize boxes
+ 	xt::xarray<uint8_t> high_boxes_quant = xt::view(boxes_quant, xt::keep(threshold_indices), xt::all());
+ 	auto high_boxes_dequant = common::dequantize(high_boxes_quant,
+-												 tensors[BOXES[i]]->vstream_info().quant_info.qp_scale,
+-												 tensors[BOXES[i]]->vstream_info().quant_info.qp_zp);
++												 tensors[BOXES[i]]->quant_info().qp_scale,
++												 tensors[BOXES[i]]->quant_info().qp_zp);
+ 	// Filter and dequantize scores
+ 	xt::xarray<uint8_t> high_scores_quant = xt::view(scores_quant, xt::keep(threshold_indices));
+ 	auto high_scores_dequant = common::dequantize(high_scores_quant,
+-												  tensors[CLASSES[i]]->vstream_info().quant_info.qp_scale,
+-												  tensors[CLASSES[i]]->vstream_info().quant_info.qp_zp);
++												  tensors[CLASSES[i]]->quant_info().qp_scale,
++												  tensors[CLASSES[i]]->quant_info().qp_zp);
+ 	// Filter and dequantize landmarks
+ 	xt::xarray<uint8_t> high_landmarks_quant = xt::view(landmarks_quant, xt::keep(threshold_indices), xt::all());
+ 	auto high_landmarks_dequant = common::dequantize(high_landmarks_quant,
+-													 tensors[LANDMARKS[i]]->vstream_info().quant_info.qp_scale,
+-													 tensors[LANDMARKS[i]]->vstream_info().quant_info.qp_zp);
++													 tensors[LANDMARKS[i]]->quant_info().qp_scale,
++													 tensors[LANDMARKS[i]]->quant_info().qp_zp);
+ 	// Filter anchors and use them to decode boxes/landmarks
+ 	auto stepped_inds = threshold_indices + steps;
+ 	auto high_anchors = xt::view(anchors, xt::keep(stepped_inds), xt::all());
+diff --git a/preview/meson.build b/preview/meson.build
+index bddc3fd..60bcefb 100644
+--- a/preview/meson.build
++++ b/preview/meson.build
+@@ -45,7 +45,10 @@ if x11_deps.found() and epoxy_deps.found()
+ endif
+ 
+ enable_qt = false
+-qt_dep = dependency('qt5', modules : ['Core', 'Widgets'], required : get_option('enable_qt'))
++qt_dep = dependency('qt6', modules : ['Core', 'Widgets'], required : false)
++if not qt_dep.found()
++    qt_dep = dependency('qt5', modules : ['Core', 'Widgets'], required : get_option('enable_qt'))
++endif
+ if qt_dep.found()
+     egl_lib = shared_module('qt-preview', files('qt_preview.cpp'),
+                             include_directories : '../',
+-- 
+2.43.0
+

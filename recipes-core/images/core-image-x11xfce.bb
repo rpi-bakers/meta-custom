@@ -131,7 +131,6 @@ IMAGE_INSTALL:append = " \
 IMAGE_INSTALL:append = " \
     libhailort \
     hailortcli \
-    pyhailort \
     libgsthailo \
     hailo-pci \
     hailo-firmware \
@@ -143,6 +142,12 @@ IMAGE_INSTALL:append = " \
     libgsthailotools \
     hailo-post-processes \
     tappas-tracers \
+"
+
+################################################################################
+# HailoRT python
+IMAGE_INSTALL:append = " \
+    pyhailort \
 "
 
 ###############################################################################
