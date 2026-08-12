@@ -1,7 +1,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI:append = " \
-    file://0001-fix-build-error.patch \
+    file://0001-fix-build-error-and-warnings.patch \
 	file://HailoRT.pc_template \
     file://hailo-tappas-core.pc_template \
 "

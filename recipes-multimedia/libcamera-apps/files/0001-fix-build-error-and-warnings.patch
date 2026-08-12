@@ -1,16 +1,17 @@
-From faadbf311ee7f03e51d29bd8c7bff94d4d39b487 Mon Sep 17 00:00:00 2001
+From 19173220a96418e8a2145656a3c1eaca67923962 Mon Sep 17 00:00:00 2001
 From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
-Date: Wed, 12 Aug 2026 17:28:09 +0900
-Subject: [PATCH] fix build error
+Date: Thu, 13 Aug 2026 01:28:27 +0900
+Subject: [PATCH] fix build error and warnings
 
 ---
  .../hailo/hailo_postprocessing_stage.cpp      | 25 ++++++++++++++++---
  post_processing_stages/hailo/hailo_scrfd.cpp  | 16 ++++++------
+ post_processing_stages/hailo/meson.build      |  5 +++-
  preview/meson.build                           |  5 +++-
- 3 files changed, 33 insertions(+), 13 deletions(-)
+ 4 files changed, 37 insertions(+), 14 deletions(-)
 
 diff --git a/post_processing_stages/hailo/hailo_postprocessing_stage.cpp b/post_processing_stages/hailo/hailo_postprocessing_stage.cpp
-index 6441e63..4d05660 100644
+index 6441e63..deef59d 100644
 --- a/post_processing_stages/hailo/hailo_postprocessing_stage.cpp
 +++ b/post_processing_stages/hailo/hailo_postprocessing_stage.cpp
 @@ -334,18 +334,35 @@ HailoROIPtr HailoPostProcessingStage::MakeROI(const std::vector<OutTensor> &outp
@@ -100,6 +101,22 @@ index 0c66ba8..9c0e14f 100644
  	// Filter anchors and use them to decode boxes/landmarks
  	auto stepped_inds = threshold_indices + steps;
  	auto high_anchors = xt::view(anchors, xt::keep(stepped_inds), xt::all());
+diff --git a/post_processing_stages/hailo/meson.build b/post_processing_stages/hailo/meson.build
+index 8ae2861..04880a4 100644
+--- a/post_processing_stages/hailo/meson.build
++++ b/post_processing_stages/hailo/meson.build
+@@ -15,7 +15,10 @@ if hailo_tappas_posproc_libdir == ''
+ endif
+ 
+ hailo_conf_data = configuration_data()
+-hailo_conf_data.set('HAILO_POSTPROC_LIB_DIR', '"' + hailo_tappas_posproc_libdir + '"')
++hailo_runtime_postproc_libdir = join_paths(get_option('prefix'), get_option('libdir'), 'rpicam-apps-postproc')
++# Use discovered tappas dir for detection only; emit the install-time path for runtime
++# lookups so built objects do not contain recipe-sysroot/TMPDIR paths.
++hailo_conf_data.set('HAILO_POSTPROC_LIB_DIR', '"' + hailo_runtime_postproc_libdir + '"')
+ hailo_postproc_lib = configure_file(output : 'hailo_postproc_lib.h', configuration : hailo_conf_data)
+ 
+ hailo_deps = [hailort_dep, hailo_tappas_dep, libcamera_dep, opencv_dep]
 diff --git a/preview/meson.build b/preview/meson.build
 index bddc3fd..60bcefb 100644
 --- a/preview/meson.build
