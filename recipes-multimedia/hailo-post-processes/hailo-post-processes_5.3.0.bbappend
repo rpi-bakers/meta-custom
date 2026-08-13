@@ -1,20 +1,21 @@
-# Stage Hailo post-processing C++ headers for downstream builds (e.g. libcamera-apps hailo postproc).
 
+# hailo-post-processes error
 do_install:append() {
+    # cp: cannot create directory 'image/usr/include/hailo/tappas/general/': No such file or directory
     install -d ${D}${includedir}/hailo/tappas
-    install -d ${D}${includedir}/hailo/tappas/general
+}
 
-    # Base headers used directly by libcamera-apps hailo sources.
+# libcamera-apps error.
+do_install:append() {
+    # post_processing_stages/hailo/hailo_yolo_inference.cpp:22:10: fatal error: detection/yolo_hailortpp.hpp: No such file or directory
+    # post_processing_stages/hailo/hailo_postprocessing_stage.hpp:21:10: fatal error: hailo_objects.hpp: No such file or directory
     cp -a ${S}/general/. ${D}${includedir}/hailo/tappas/general/
 
-    # Postprocess headers are included as "detection/...", "common/...", etc.
-    # Keep that layout directly under ${includedir}/hailo/tappas.
+    #../git/post_processing_stages/hailo/hailo_yolo_inference.cpp:22:10: fatal error: detection/yolo_hailortpp.hpp: No such file or directory
     cp -a ${S}/libs/postprocesses/. ${D}${includedir}/hailo/tappas/
 
-    # libgsthailotools also installs this .pc; keep a single provider to avoid
-    # do_prepare_recipe_sysroot file collisions.
+    # FileExistsError: [Errno 17] File exists:
+    #  'hailo-post-processes/usr/lib/pkgconfig/gsthailometa.pc'
+    #  -> 'libcamera-apps/1.9.0/recipe-sysroot/usr/lib/pkgconfig/gsthailometa.pc'
     rm -f ${D}${libdir}/pkgconfig/gsthailometa.pc
-
-    # gsthailometa headers must also come from a single provider.
-    rm -rf ${D}${includedir}/gsthailometa
 }

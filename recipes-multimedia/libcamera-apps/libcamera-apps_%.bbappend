@@ -8,41 +8,26 @@ SRC_URI:append = " \
 
 # Enable GUI preview path for X11/desktop sessions and enable Hailo/OpenCV
 # by default via PACKAGECONFIG so meson receives the correct -D flags.
-# Enable GUI preview path for X11/desktop sessions and enable Hailo/OpenCV
-# by default via PACKAGECONFIG so meson receives the correct -D flags.
-PACKAGECONFIG:append = " qt hailo opencv"
+PACKAGECONFIG:append = " qt opencv"
 
+# add hailo config
 PACKAGECONFIG[hailo] = "-Denable_hailo=enabled, -Denable_hailo=disabled, libhailort "
+PACKAGECONFIG:append = " hailo"
 
-# Ensure recipe build-time ordering so the Hailo CMake export and OpenCV
-# libraries are present in the sysroot for meson to find. Meson requires
-# CMake to be available to consume Hailo's CMake config, so add cmake-native
-# for configure-time.
 DEPENDS += " libhailort hailo-post-processes libgsthailotools opencv "
 
-# Help Meson discover the upstream CMake exports when pkg-config is missing
-# (point Meson/CMake to the installed HailoRT CMake config in the sysroot).
-#MESON_ARGS:append = " -DHailoRT_DIR=${STAGING_DIR}/usr/lib/cmake/HailoRT"
+FILES:${PN}:append = " \
+    ${datadir}/hailo-models \
+    ${libdir}/hailo-post-processes \
+"
+
+# Provide pkg-config fallbacks in the sysroot for HailoRT and tappas core
+# from templates during configure-time.
 
 HAILO_TAPPAS_CORE_VERSION ?= "3.31.0"
 HAILO_TAPPAS_WORKSPACE ?= "/usr"
 HAILORT_VERSION ?= "4.24.0"
 
-#do_install:append() {
-#    # Install hailo post process file.
-#    #install -d ${D}${datadir}/rpicam-apps/assets
-#    #install -m 0644 ${S}/assets/hailo_*.json ${D}${datadir}/rpicam-apps/assets/
-#}
-
-#FILES:${PN} += "${datadir}/rpicam-apps/assets/hailo_*.json"
-FILES:${PN}:append = " ${datadir}/hailo-models"
-
-# Package hailo post-processing shared objects that get installed under
-# /usr/lib/hailo-post-processes so they are not left installed-but-unshipped.
-FILES:${PN}:append = " ${libdir}/hailo-post-processes"
-
-# Provide pkg-config fallbacks in the sysroot for HailoRT and tappas core
-# from templates during configure-time.
 do_configure:prepend() {
 	# Ensure native cmake from recipe-sysroot-native is on PATH so Meson can
 	# execute CMake for dependency discovery when needed.

@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = " \
     file://hailo-ai-smoke-test \
+    file://hailo-ai-rpicam-command-sample \
 "
 
 S = "${WORKDIR}"
@@ -18,9 +19,11 @@ RDEPENDS:${PN} += " \
 do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${WORKDIR}/hailo-ai-smoke-test ${D}${bindir}/hailo-ai-smoke-test
+    install -m 0755 ${WORKDIR}/hailo-ai-rpicam-command-sample ${D}${bindir}/hailo-ai-rpicam-command-sample
 }
 
 
 FILES:${PN} += " \
     ${bindir}/hailo-ai-smoke-test \
+    ${bindir}/hailo-ai-rpicam-command-sample \
 "
