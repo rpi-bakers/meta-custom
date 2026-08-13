@@ -37,6 +37,10 @@ HAILORT_VERSION ?= "4.24.0"
 #FILES:${PN} += "${datadir}/rpicam-apps/assets/hailo_*.json"
 FILES:${PN}:append = " ${datadir}/hailo-models"
 
+# Package hailo post-processing shared objects that get installed under
+# /usr/lib/hailo-post-processes so they are not left installed-but-unshipped.
+FILES:${PN}:append = " ${libdir}/hailo-post-processes"
+
 # Provide pkg-config fallbacks in the sysroot for HailoRT and tappas core
 # from templates during configure-time.
 do_configure:prepend() {

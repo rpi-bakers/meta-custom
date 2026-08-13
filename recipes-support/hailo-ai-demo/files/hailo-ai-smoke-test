@@ -7,8 +7,8 @@ MODEL_PATH="${1:-/usr/share/hailo-models/yolov8s_h8l.hef}"
 echo "[hailo-ai-smoke-test] Start"
 
 if ! command -v hailortcli >/dev/null 2>&1; then
-    echo "hailortcli was not found."
-    echo "Install Hailo runtime packages with HAILO_RUNTIME_PACKAGES in local.conf."
+    echo "[error] hailortcli was not found."
+    echo "[info] Install Hailo runtime packages with HAILO_RUNTIME_PACKAGES in local.conf."
     exit 1
 fi
 
@@ -16,28 +16,28 @@ echo ""
 echo "[1/3] Identify Hailo device"
 
 echo "------------------------------"
-echo "hailortcli fw-control identify"
+echo "[cmd] hailortcli fw-control identify"
 hailortcli fw-control identify
 
 
 echo "------------------------------"
-echo "lspci | grep -i hailo"
+echo "[cmd] lspci | grep -i hailo"
 lspci | grep -i hailo
 
 echo "---------------------------------------------------"
 echo "[1.5/3] Validate Hailo GStreamer plugins (optional)"
 if command -v gst-inspect-1.0 >/dev/null 2>&1; then
     if gst-inspect-1.0 | grep -q "hailo"; then
-        echo "Detected Hailo GStreamer elements"
+        echo "[info] Detected Hailo GStreamer elements"
         gst-inspect-1.0 | grep "hailo" || true
     else
-        echo "No Hailo GStreamer elements were found."
-        echo "Install libgsthailo / libgsthailotools / hailo-post-processes if needed."
+        echo "[error] No Hailo GStreamer elements were found."
+        echo "[info] Install libgsthailo / libgsthailotools / hailo-post-processes if needed."
     fi
 
         echo "-----------------------------------"
     if [ -d /usr/lib/hailo-post-processes ]; then
-        echo "Found /usr/lib/hailo-post-processes"
+        echo "[info] Found /usr/lib/hailo-post-processes"
     fi
 fi
 
@@ -48,7 +48,7 @@ if [ -f "${MODEL_PATH}" ]; then
     hailortcli benchmark "${MODEL_PATH}"
 else
     echo "---------------------------------------"
-    echo "Model file was not found: ${MODEL_PATH}"
+    echo "[error] Model file was not found: ${MODEL_PATH}"
     echo "Install model package and rerun with:"
     echo "  hailo-ai-smoke-test /path/to/model.hef"
 fi
@@ -58,17 +58,35 @@ echo "[3/3] rpicam command examples"
 echo "If connected over SSH, export display first:"
 echo "  export DISPLAY=:0.0"
 echo ""
+
+# Preview parameters means a window location and size on the screen.
+PREVIEW_TOP=100
+PREVIEW_LEFT=200
+PREVIEW_WIDTH=1280
+PREVIEW_HEIGHT=720
+
+# lores parameters means the size of the low resolution image that is sent to the Hailo device for inference.
+LORES_WIDTH=640
+LORES_HEIGHT=640
+
+SIZE_PARAMS="--lores-width ${LORES_WIDTH} --lores-height ${LORES_HEIGHT} --preview ${PREVIEW_LEFT},${PREVIEW_TOP},${PREVIEW_WIDTH},${PREVIEW_HEIGHT}"
+
 echo "Object Detection (YOLOv6):"
-echo "  rpicam-hello -t 0 --post-process-file /usr/share/rpicam-apps/assets/hailo_yolov6_inference.json --lores-width 640 --lores-height 640"
+echo " rpicam-hello -t 0 --qt-preview --post-process-file /usr/share/rpi-camera-assets/hailo_yolox_inference.json ${SIZE_PARAMS}"
+
 echo "Object Detection (YOLOv8):"
-echo "  rpicam-hello -t 0 --post-process-file /usr/share/rpicam-apps/assets/hailo_yolov8_inference.json --lores-width 640 --lores-height 640"
+echo "  rpicam-hello -t 0 --qt-preview --post-process-file /usr/share/rpi-camera-assets/hailo_yolov8_inference.json ${SIZE_PARAMS}"
+
 echo "Object Detection (YoloX):"
-echo "  rpicam-hello -t 0 --post-process-file /usr/share/rpicam-apps/assets/hailo_yolox_inference.json --lores-width 640 --lores-height 640"
+echo "  rpicam-hello -t 0 --qt-preview --post-process-file /usr/share/rpi-camera-assets/hailo_yolox_inference.json ${SIZE_PARAMS}"
+
 echo "Person + Face (YOLOv5):"
-echo "  rpicam-hello -t 0 --post-process-file /usr/share/rpicam-apps/assets/hailo_yolov5_personface.json --lores-width 640 --lores-height 640"
+echo "  rpicam-hello -t 0 --qt-preview --post-process-file /usr/share/rpi-camera-assets/hailo_yolov5_personface.json ${SIZE_PARAMS}"
+
 echo "Segmentation:"
-echo "  rpicam-hello -t 0 --post-process-file /usr/share/rpicam-apps/assets/hailo_yolov5_segmentation.json --lores-width 640 --lores-height 640 --framerate 20"
+echo "  rpicam-hello -t 0 --qt-preview --post-process-file /usr/share/rpi-camera-assets/hailo_yolov5_segmentation.json ${SIZE_PARAMS} --framerate 20"
+
 echo "Pose Estimation:"
-echo "  rpicam-hello -t 0 --post-process-file /usr/share/rpicam-apps/assets/hailo_yolov8_pose.json --lores-width 640 --lores-height 640"
+echo "  rpicam-hello -t 0 --qt-preview --post-process-file /usr/share/rpi-camera-assets/hailo_yolov8_pose.json ${SIZE_PARAMS}"
 
 echo "[hailo-ai-smoke-test] Done"
