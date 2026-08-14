@@ -1,0 +1,61 @@
+#!/bin/sh
+
+set -eu
+
+echo "------------------------------"
+echo "rpicam command examples"
+echo "If connected over SSH, export display first:"
+echo "  export DISPLAY=:0.0"
+echo ""
+
+usage() {
+    echo "Usage: $0 [--help] [post process]"
+    echo "  --help: Show this help message"
+    echo "post process: One of the following post process files:"
+    echo "classifier"
+    echo "pose_inf_fl"
+    echo "scrfd"
+    echo "yolov5_personface"
+    echo "yolov5_segmentation"
+    echo "yolov6_inference"
+    echo "yolov8_inference"
+    echo "yolov8_pose"
+    echo "yolox_inference"
+
+    exit 1
+}
+
+
+# Preview parameters means a window location and size on the screen.
+PREVIEW_TOP=100
+PREVIEW_LEFT=200
+PREVIEW_WIDTH=1280
+PREVIEW_HEIGHT=720
+
+# lores parameters means the size of the low resolution image that is sent to the Hailo device for inference.
+readonly LORES_WIDTH=640
+readonly LORES_HEIGHT=640
+
+readonly ASSET_DIR="/usr/share/rpi-camera-assets"
+readonly POSTPROCFILE="${ASSET_DIR}/hailo_$1.json"
+readonly SIZE_PARAMS="--lores-width ${LORES_WIDTH} --lores-height ${LORES_HEIGHT} --preview ${PREVIEW_LEFT},${PREVIEW_TOP},${PREVIEW_WIDTH},${PREVIEW_HEIGHT}"
+
+main() {
+    if [ "$#" -ne 1 ]; then
+        usage
+    fi
+
+    if [ "$1" = "--help" ]; then
+        usage
+    fi
+
+    if [ ! -f "${POSTPROCFILE}" ]; then
+        echo "Error: Post process file ${POSTPROCFILE} does not exist."
+        usage
+    fi
+
+    echo "rpicam-hello -t 0 --qt-preview --post-process-file ${POSTPROCFILE} ${SIZE_PARAMS}"
+    rpicam-hello -t 0 --qt-preview --post-process-file "${POSTPROCFILE}" "${SIZE_PARAMS}"
+}
+
+main "$@"
