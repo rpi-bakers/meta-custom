@@ -39,4 +39,8 @@ do_deploy:append:raspberrypi5() {
             echo "dtoverlay=${CAMERA_OVERLAY}" >> $CONFIG
         fi
     fi
+
+    # Enable CPU fan.
+    echo "dtparam=cooling_fan=on" >> $CONFIG
+
 }
