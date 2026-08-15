@@ -21,7 +21,7 @@ do_compile() {
 }
 
 do_install() {
-    install -d ${D}${bindir}
-    install -m 0644 helloworld.jar ${D}${bindir}/
-    install -m 0755 helloworld-java ${D}${bindir}/
+    install -d "${D}${bindir}"
+    install -m 0644 helloworld.jar "${D}${bindir}/"
+    install -m 0755 helloworld-java "${D}${bindir}/"
 }

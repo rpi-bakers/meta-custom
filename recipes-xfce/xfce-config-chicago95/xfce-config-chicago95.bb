@@ -12,21 +12,21 @@ HOME = "/${USER}"
 
 do_install:append() {
     # Copy the configuration file to the image
-    install -d ${D}${HOME}/.config
-    cp -r ${WORKDIR}/.config ${D}/${HOME}/
-    chown -R ${USER}:${USER} ${D}/${HOME}/.config/
+    install -d "${D}${HOME}/.config"
+    cp -r "${WORKDIR}/.config" "${D}/${HOME}/"
+    chown -R "${USER}:${USER}" "${D}/${HOME}/.config/"
 
     # Copy the Desktop files to the image
-    install -d ${D}${HOME}/Desktop
-    cp -r ${WORKDIR}/Desktop ${D}/${HOME}/
-    chown -R ${USER}:${USER} ${D}/${HOME}/Desktop
+    install -d "${D}${HOME}/Desktop"
+    cp -r "${WORKDIR}/Desktop" "${D}/${HOME}/"
+    chown -R "${USER}:${USER}" "${D}/${HOME}/Desktop"
 
     # Copy the .local files to the image
     # 'share/gvfs-metadata/home' has Desktop shortcut's metadata.
-    install -d ${D}${HOME}/.local
-    cp -r ${WORKDIR}/.local ${D}/${HOME}/
-    chown -R ${USER}:${USER} ${D}/${HOME}/.local
-    chmod 0755 ${D}/${HOME}/.local/bin/map-touch-to-dsi.sh
+    install -d "${D}${HOME}/.local"
+    cp -r "${WORKDIR}/.local" "${D}/${HOME}/"
+    chown -R "${USER}:${USER}" "${D}/${HOME}/.local"
+    chmod 0755 "${D}/${HOME}/.local/bin/map-touch-to-dsi.sh"
 }
 
 FILES:${PN} += " \

@@ -32,17 +32,17 @@ DEPENDS:append = " openssl-native"
 do_install:append(){
     KEY_DIR=${D}${sysconfdir}/vnc/keys/
 
-    install -m 0755 -d ${KEY_DIR}
+    install -m 0755 -d "${KEY_DIR}"
 
-    openssl genrsa -out ${KEY_DIR}/tls.key 2048
-    openssl req -new -key ${KEY_DIR}/tls.key -out ${KEY_DIR}/tls.csr -subj "/CN=raspi5"
-    openssl x509 -req -days 365 -in ${KEY_DIR}/tls.csr -signkey ${KEY_DIR}/tls.key -out ${KEY_DIR}/tls.crt
-    chmod 0600 ${KEY_DIR}/tls.crt
-    chmod 0600 ${KEY_DIR}/tls.key
-    chown -R weston:weston ${KEY_DIR}/*
+    openssl genrsa -out "${KEY_DIR}/tls.key" 2048
+    openssl req -new -key "${KEY_DIR}/tls.key" -out "${KEY_DIR}/tls.csr" -subj "/CN=raspi5"
+    openssl x509 -req -days 365 -in "${KEY_DIR}/tls.csr" -signkey "${KEY_DIR}/tls.key" -out "${KEY_DIR}/tls.crt"
+    chmod 0600 "${KEY_DIR}/tls.crt"
+    chmod 0600 "${KEY_DIR}/tls.key"
+    chown -R weston:weston "${KEY_DIR}"/*
 
-    install -D -p -m0644 ${WORKDIR}/weston.ini ${D}${sysconfdir}/xdg/weston/weston.ini
-    install -D -p -m0644 ${WORKDIR}/weston.service ${D}${systemd_system_unitdir}/weston.service
+    install -D -p -m0644 "${WORKDIR}/weston.ini" "${D}${sysconfdir}/xdg/weston/weston.ini"
+    install -D -p -m0644 "${WORKDIR}/weston.service" "${D}${systemd_system_unitdir}/weston.service"
 }
 
 FILES:${PN} += "\

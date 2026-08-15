@@ -12,27 +12,27 @@ SRC_URI += " \
 # export BB_ENV_PASSTHROUGH_ADDITIONS="$BB_ENV_PASSTHROUGH_ADDITIONS WIFI_PASSWORD"
 do_install() {
     # wpa_supplicant config
-    install -d ${D}${sysconfdir}/wpa_supplicant
-    install -Dm0644 ${WORKDIR}/wpa_supplicant-wlan0.conf.in \
-                    ${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf
+    install -d "${D}${sysconfdir}/wpa_supplicant"
+    install -Dm0644 "${WORKDIR}/wpa_supplicant-wlan0.conf.in" \
+                    "${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf"
     sed -i 's|%%WIFI_PASSWORD%%|${WIFI_PASSWORD}|g' \
             "${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf"
     sed -i 's|%%WIFI_SSID%%|${WIFI_SSID}|g' \
             "${D}${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf"
 
     # systemd-networkd config
-    install -d ${D}${sysconfdir}/systemd/network
-    install -m 0644 ${WORKDIR}/wlan0.network ${D}${sysconfdir}/systemd/network/wlan0.network
+    install -d "${D}${sysconfdir}/systemd/network"
+    install -m 0644 "${WORKDIR}/wlan0.network" "${D}${sysconfdir}/systemd/network/wlan0.network"
 
     # Enable wpa_supplicant@wlan0 service
-    install -d ${D}${sysconfdir}/systemd/system/multi-user.target.wants
+    install -d "${D}${sysconfdir}/systemd/system/multi-user.target.wants"
     ln -sf /lib/systemd/system/wpa_supplicant@.service \
-            ${D}${sysconfdir}/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
+            "${D}${sysconfdir}/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service"
 }
 
 FILES:${PN} += " \
-    ${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf \
-    ${sysconfdir}/systemd/network/wlan0.network \
-    ${sysconfdir}/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service \
-    ${sysconfdir}/weston/certs \
+    "${sysconfdir}/wpa_supplicant/wpa_supplicant-wlan0.conf" \
+    "${sysconfdir}/systemd/network/wlan0.network" \
+    "${sysconfdir}/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service" \
+    "${sysconfdir}/weston/certs" \
 "

@@ -15,7 +15,7 @@ DEPENDS += "python3-setuptools-scm-native"
 do_install:append() {
     # Upstream ships prebuilt pulseio helpers for several boards/arches.
     # They are not built by this recipe and can fail objcopy/split-debug on target arch switches.
-    find ${D}${PYTHON_SITEPACKAGES_DIR}/adafruit_blinka/microcontroller -type f -name "libgpiod_pulsein*" -delete || true
+    find "${D}${PYTHON_SITEPACKAGES_DIR}/adafruit_blinka/microcontroller" -type f -name "libgpiod_pulsein*" -delete || true
 }
 
 RDEPENDS:${PN} += " \

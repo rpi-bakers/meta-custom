@@ -18,8 +18,8 @@ inherit pkgconfig
 S = "${WORKDIR}/git"
 
 do_install() {
-    ${MAKE} NO_PYTHON=1 prefix=${prefix} plugin_dir=${libdir}/trace-cmd/plugins DESTDIR=${D} install_gui
-    ${MAKE} NO_PYTHON=1 prefix=${prefix} plugin_dir=${libdir}/trace-cmd/plugins DESTDIR=${D} install
+    ${MAKE} NO_PYTHON=1 "prefix=${prefix}" "plugin_dir=${libdir}/trace-cmd/plugins" "DESTDIR=${D}" install_gui
+    ${MAKE} NO_PYTHON=1 "prefix=${prefix}" "plugin_dir=${libdir}/trace-cmd/plugins" "DESTDIR=${D}" install
 }
 
 FILES:${PN} += "${libdir}/trace-cmd/plugins/*.so"

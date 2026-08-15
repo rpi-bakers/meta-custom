@@ -18,21 +18,22 @@ RDEPENDS:${PN} += "bash"
 inherit allarch
 
 do_install() {
-    install -d ${D}${datadir}/themes
-    install -d ${D}${datadir}/icons
-    install -d ${D}${datadir}/fonts
-    install -d ${D}${datadir}/extras
-    install -d ${D}${datadir}/plymouth/themes
-    install -d ${D}${datadir}/sounds/
-    cp -r ${S}/Theme/Chicago95 ${D}${datadir}/themes/
-    cp -r ${S}/Icons/* ${D}${datadir}/icons/
-    cp -r ${S}/Cursors/* ${D}${datadir}/icons/
-    cp -r ${S}/Extras/* ${D}${datadir}/extras/
-    cp -v ${S}/Fonts/vga_font/LessPerfectDOSVGA.ttf ${D}${datadir}/fonts/
-    cp -r ${S}/Fonts/bitmap/cronyx-cyrillic ${D}${datadir}/fonts/
-    cp -r ${S}/Plymouth/Chicago95 ${D}${datadir}/plymouth/themes/
-    cp -r ${S}/Plymouth/RetroTux ${D}${datadir}/plymouth/themes/
-    cp -r ${S}/sounds/Chicago95 ${D}${datadir}/sounds/
+    install -d "${D}${datadir}/themes"
+    install -d "${D}${datadir}/icons"
+    install -d "${D}${datadir}/fonts"
+    install -d "${D}${datadir}/extras"
+    install -d "${D}${datadir}/plymouth/themes"
+    install -d "${D}${datadir}/sounds/"
+
+    cp -r "${S}/Theme/Chicago95"                        "${D}${datadir}/themes/"
+    cp -r "${S}/Icons/"*                                "${D}${datadir}/icons/"
+    cp -r "${S}/Cursors/"*                              "${D}${datadir}/icons/"
+    cp -r "${S}/Extras/"*                               "${D}${datadir}/extras/"
+    cp -v "${S}/Fonts/vga_font/LessPerfectDOSVGA.ttf"   "${D}${datadir}/fonts/"
+    cp -r "${S}/Fonts/bitmap/cronyx-cyrillic"           "${D}${datadir}/fonts/"
+    cp -r "${S}/Plymouth/Chicago95"                     "${D}${datadir}/plymouth/themes/"
+    cp -r "${S}/Plymouth/RetroTux"                      "${D}${datadir}/plymouth/themes/"
+    cp -r "${S}/sounds/Chicago95"                       "${D}${datadir}/sounds/"
 }
 
 FILES:${PN} += " \

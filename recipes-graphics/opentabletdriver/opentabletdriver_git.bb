@@ -33,7 +33,7 @@ do_compile() {
 do_install:append() {
     cp -r ${S}/dist/opentabletdriver/* ${D}
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/otd-daemon.service ${D}${systemd_system_unitdir}/
+    install -m 0644 ${WORKDIR}/otd-daemon.service ${D}${systemd_system_unitdir}/otd-daemon.service
 }
 
 FILES:${PN} += " \

@@ -91,9 +91,9 @@ TARGET_CC_ARCH += "${LDFLAGS}"
 # fix No module named 'giscanner._giscanner
 # -----------------------------------------------------------------------------
 do_configure:prepend() {
-    touch ${S}/ABOUT-NLS
-    ln -sf ${STAGING_LIBDIR_NATIVE}/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so \
-            ${STAGING_LIBDIR_NATIVE}/gobject-introspection/giscanner/_giscanner.so
+    touch "${S}/ABOUT-NLS"
+    ln -sf "${STAGING_LIBDIR_NATIVE}/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so" \
+            "${STAGING_LIBDIR_NATIVE}/gobject-introspection/giscanner/_giscanner.so"
 }
 
 ###############################################################################
@@ -114,7 +114,7 @@ do_compile() {
 # -----------------------------------------------------------------------------
 do_install() {
     oe_runmake install \
-        DESTDIR=${D} \
+        DESTDIR="${D}" \
         ANTHY_INCLUDEDIR="${STAGING_INCDIR}"
 }
 
@@ -125,19 +125,21 @@ do_install() {
 # -----------------------------------------------------------------------------
 do_install:append() {
     sed -e "s|${HOSTTOOLS_DIR}/python3|/usr/bin/python3|g" \
-        -i ${D}${libexecdir}/ibus-engine-anthy
+        -i "${D}${libexecdir}/ibus-engine-anthy"
 
     sed -e "s|${HOSTTOOLS_DIR}/python3|/usr/bin/python3|g" \
-        -i ${D}${libexecdir}/ibus-setup-anthy
+        -i "${D}${libexecdir}/ibus-setup-anthy"
 
-    cp ${STAGING_DATADIR}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml \
-           ${D}${datadir}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml
+    cp "${STAGING_DATADIR}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml" \
+           "${D}${datadir}/glib-2.0/schemas/org.freedesktop.ibus.gschema.xml"
 
     # Set ibus environment variables.
-    install -d ${D}${sysconfdir}/profile.d
-    echo 'export GTK_IM_MODULE=ibus'            >> ${D}${sysconfdir}/profile.d/ibus.sh
-    echo 'export QT_IM_MODULE=ibus'             >> ${D}${sysconfdir}/profile.d/ibus.sh
-    echo 'export XMODIFIERS="@im=ibus"'         >> ${D}${sysconfdir}/profile.d/ibus.sh
+    install -d "${D}${sysconfdir}/profile.d"
+    {
+        echo 'export GTK_IM_MODULE=ibus'
+        echo 'export QT_IM_MODULE=ibus'
+        echo 'export XMODIFIERS="@im=ibus"'
+    } >> "${D}${sysconfdir}/profile.d/ibus.sh"
 }
 
 ###############################################################################

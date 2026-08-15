@@ -11,36 +11,36 @@ CAMERA_OVERLAY ??= "ov5647"
 do_deploy:append:raspberrypi5() {
     if [ "${ENABLE_UART}" = "1" ] ; then
         # Append UART configuration under the Enable UART comment
-        sed -i '/# Enable UART/a\dtparam=uart0_console' $CONFIG
+        sed -i '/# Enable UART/a\dtparam=uart0_console' "$CONFIG"
     fi
 
     if [ "${ENABLE_NVME}" = "1" ] ; then
-        echo "# enable PCIe and NVMe" >> $CONFIG
-        echo "dtparam=nvme" >> $CONFIG
+        echo "# enable PCIe and NVMe" >> "$CONFIG"
+        echo "dtparam=nvme" >> "$CONFIG"
     fi
 
     # DSI + HDMI multi display on Raspberry Pi 5
     if [ "${ENABLE_DSI_DISPLAY}" = "1" ] ; then
-        echo "# enable DSI + HDMI multi display" >> $CONFIG
-        echo "display_auto_detect=1" >> $CONFIG
+        echo "# enable DSI + HDMI multi display" >> "$CONFIG"
+        echo "display_auto_detect=1" >> "$CONFIG"
         if [ "${ENABLE_DUAL_DISPLAY}" = "1" ] ; then
-            echo "max_framebuffers=2" >> $CONFIG
+            echo "max_framebuffers=2" >> "$CONFIG"
         else
             # Keep single framebuffer in DSI-only mode to avoid touch/click mapping issues.
-            echo "max_framebuffers=1" >> $CONFIG
+            echo "max_framebuffers=1" >> "$CONFIG"
         fi
-        echo "dtoverlay=${DSI_OVERLAY}" >> $CONFIG
+        echo "dtoverlay=${DSI_OVERLAY}" >> "$CONFIG"
     fi
 
     if [ "${ENABLE_CAMERA}" = "1" ] ; then
-        echo "# enable camera stack" >> $CONFIG
-        echo "camera_auto_detect=${CAMERA_AUTO_DETECT}" >> $CONFIG
+        echo "# enable camera stack" >> "$CONFIG"
+        echo "camera_auto_detect=${CAMERA_AUTO_DETECT}" >> "$CONFIG"
         if [ -n "${CAMERA_OVERLAY}" ] ; then
-            echo "dtoverlay=${CAMERA_OVERLAY}" >> $CONFIG
+            echo "dtoverlay=${CAMERA_OVERLAY}" >> "$CONFIG"
         fi
     fi
 
     # Enable CPU fan.
-    echo "dtparam=cooling_fan=on" >> $CONFIG
+    echo "dtparam=cooling_fan=on" >> "$CONFIG"
 
 }

@@ -14,7 +14,7 @@ RDEPENDS:${PN} += " \
 "
 
 do_install() {
-    install -d ${D}${bindir}
-    install -m 0644 helloworld.py ${D}${bindir}/
-    install -m 0755 helloworld-python ${D}${bindir}/
+    install -d "${D}${bindir}"
+    install -m 0644 helloworld.py "${D}${bindir}/"
+    install -m 0755 helloworld-python "${D}${bindir}/"
 }

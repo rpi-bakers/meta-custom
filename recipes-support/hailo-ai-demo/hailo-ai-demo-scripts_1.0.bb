@@ -17,13 +17,13 @@ RDEPENDS:${PN} += " \
 "
 
 do_install() {
-    install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/hailo-ai-smoke-test ${D}${bindir}/hailo-ai-smoke-test
-    install -m 0755 ${WORKDIR}/rpicam-hello-hailo ${D}${bindir}/rpicam-hello-hailo
+    install -d "${D}${bindir}"
+    install -m 0755 "${WORKDIR}/hailo-ai-smoke-test" "${D}${bindir}/hailo-ai-smoke-test"
+    install -m 0755 "${WORKDIR}/rpicam-hello-hailo" "${D}${bindir}/rpicam-hello-hailo"
 }
 
 
 FILES:${PN} += " \
     ${bindir}/hailo-ai-smoke-test \
-    ${bindir}/hailo-ai-rpicam-command-sample \
+    ${bindir}/rpicam-hello-hailo \
 "
