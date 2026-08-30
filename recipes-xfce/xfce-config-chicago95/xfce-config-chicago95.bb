@@ -26,13 +26,17 @@ do_install:append() {
     install -d "${D}${HOME}/.local"
     cp -r "${WORKDIR}/.local" "${D}/${HOME}/"
     chown -R "${USER}:${USER}" "${D}/${HOME}/.local"
-    chmod 0755 "${D}/${HOME}/.local/bin/map-touch-to-dsi.sh"
+    chmod -R 0755 "${D}/${HOME}/.local/bin/map-touch-to-dsi.sh"
+    # script to map touch screen and tablet pen
+    install -d "${D}${sysconfdir}/xdg/autostart"
+    install -m 0755 "${WORKDIR}/.config/autostart/touch-map-dsi.desktop" "${D}${sysconfdir}/xdg/autostart/touch-map-dsi.desktop"
 }
 
 FILES:${PN} += " \
     ${HOME}/.config/ \
     ${HOME}/Desktop/ \
     ${HOME}/.local/ \
+    ${sysconfdir}/xdg/autostart/touch-map-dsi.desktop \
 "
 
 RDEPENDS:${PN} += " \
