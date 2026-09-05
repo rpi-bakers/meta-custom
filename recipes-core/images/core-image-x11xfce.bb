@@ -14,12 +14,7 @@ IMAGE_LINGUAS ?= "ja-jp ja-jp.euc-jp"
 GLIBC_GENERATE_LOCALES = "ja_JP.UTF-8 ja_JP.EUC-JP"
 
 ###############################################################################
-# ssh server settings
-IMAGE_FEATURES:append = " ssh-server-openssh"
-
-# change sshd mode from socket activation to service mode
-PACKAGECONFIG:pn-openssh = "systemd-sshd-service-mode"
-
+# miscellaneous applications
 IMAGE_INSTALL:append = " \
     xauth \
     \
@@ -27,13 +22,17 @@ IMAGE_INSTALL:append = " \
     xeyes \
     xclock \
     xterm \
-    vim \
-    audacious \
-    audacious-plugins \
     \
     xserver-xf86-config \
     bash-config \
     \
+"
+
+###############################################################################
+# audio applications
+IMAGE_INSTALL:append = " \
+    audacious \
+    audacious-plugins \
 "
 
 ###############################################################################
@@ -157,8 +156,6 @@ IMAGE_INSTALL:append = " \
     libcamera-apps \
 "
 
-#    qtbase \
-#    qtbase-plugins \
 ###############################################################################
 # development tools
 IMAGE_INSTALL:append = " \

@@ -25,10 +25,10 @@ wait_for_output()
     return 1
 }
 
-sleep 3
-
 wait_for_output "${DISPLAY_DSI}" || exit 1
 wait_for_output "${DISPLAY_HDMI}" || exit 1
+
+sleep 5
 
 TOUCH_IDS=$(find_touch_ids)
 echo "[map to touch] set Generic FT5x06 touchscreen ID=${TOUCH_IDS} -> ${DISPLAY_DSI}"

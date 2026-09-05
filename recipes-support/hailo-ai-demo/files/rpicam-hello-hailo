@@ -1,34 +1,63 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
-echo "------------------------------"
-echo "rpicam command examples"
+echo "-----------------------------------------------"
+echo "rpicam command with hailo post process examples"
 echo "If connected over SSH, export display first:"
 echo "  export DISPLAY=:0.0"
 echo ""
 
+# List of available post-process profiles
+POSTPROCS=(
+    classifier
+    pose_inf_fl
+    scrfd
+    yolov5_personface
+    yolov5_segmentation
+    yolov6_inference
+    yolov8_inference
+    yolov8_pose
+    yolox_inference
+)
+
+print_profiles() {
+    local i=1
+    for p in "${POSTPROCS[@]}"; do
+        printf "  %2d) %s\n" "$i" "$p"
+        i=$((i + 1))
+    done
+}
+
 usage() {
     echo "Usage: $0 [--help] [post process]"
     echo "  --help: Show this help message"
-    echo "post process: One of the following post process files:"
-    echo "classifier"
-    echo "pose_inf_fl"
-    echo "scrfd"
-    echo "yolov5_personface"
-    echo "yolov5_segmentation"
-    echo "yolov6_inference"
-    echo "yolov8_inference"
-    echo "yolov8_pose"
-    echo "yolox_inference"
-
+    echo "post process: One of the following post process files (or enter number):"
+    print_profiles
     exit 1
+}
+
+choose_profile() {
+    while true; do
+        read -r -p "Enter number (or q to quit): " sel
+        if [ "$sel" = "q" ] || [ "$sel" = "Q" ]; then
+            echo "Aborted." >&2
+            exit 1
+        fi
+        if [[ "$sel" =~ ^[0-9]+$ ]]; then
+            if [ "$sel" -ge 1 ] && [ "$sel" -le "${#POSTPROCS[@]}" ]; then
+                echo "${POSTPROCS[$((sel - 1))]}"
+                return 0
+            fi
+        fi
+        echo "Invalid selection. Please try again."
+    done
 }
 
 
 # Preview parameters means a window location and size on the screen.
-PREVIEW_TOP=100
-PREVIEW_LEFT=200
+PREVIEW_TOP=10
+PREVIEW_LEFT=20
 PREVIEW_WIDTH=1280
 PREVIEW_HEIGHT=720
 
@@ -37,25 +66,58 @@ readonly LORES_WIDTH=640
 readonly LORES_HEIGHT=640
 
 readonly ASSET_DIR="/usr/share/rpi-camera-assets"
-readonly POSTPROCFILE="${ASSET_DIR}/hailo_$1.json"
-readonly SIZE_PARAMS="--lores-width ${LORES_WIDTH} --lores-height ${LORES_HEIGHT} --preview ${PREVIEW_LEFT},${PREVIEW_TOP},${PREVIEW_WIDTH},${PREVIEW_HEIGHT}"
+readonly SIZE_PARAMS=(
+    --lores-width "${LORES_WIDTH}"
+    --lores-height "${LORES_HEIGHT}"
+    --preview "${PREVIEW_LEFT},${PREVIEW_TOP},${PREVIEW_WIDTH},${PREVIEW_HEIGHT}"
+)
 
 main() {
+    # Determine selected post-process profile
     if [ "$#" -ne 1 ]; then
-        usage
+        echo "No post process specified."
+        print_profiles
+        POSTPROCNAME=$(choose_profile)
+    else
+        if [ "$1" = "--help" ]; then
+            usage
+        fi
+
+        # If numeric, treat as index selection
+        if printf '%s' "$1" | grep -Eq '^[0-9]+$'; then
+            idx=$1
+            if [ "$idx" -ge 1 ] && [ "$idx" -le "${#POSTPROCS[@]}" ]; then
+                POSTPROCNAME="${POSTPROCS[$((idx - 1))]}"
+            else
+                echo "Invalid numeric selection: $1"
+                POSTPROCNAME=$(choose_profile)
+            fi
+        else
+            # If matches known profile name, use it; otherwise prompt
+            found=false
+            for p in "${POSTPROCS[@]}"; do
+                if [ "$1" = "$p" ]; then
+                    found=true
+                    POSTPROCNAME="$1"
+                    break
+                fi
+            done
+            if [ "$found" = false ]; then
+                echo "Unknown profile: $1"
+                POSTPROCNAME=$(choose_profile)
+            fi
+        fi
     fi
 
-    if [ "$1" = "--help" ]; then
-        usage
-    fi
+    POSTPROCFILE="${ASSET_DIR}/hailo_${POSTPROCNAME}.json"
 
     if [ ! -f "${POSTPROCFILE}" ]; then
-        echo "Error: Post process file ${POSTPROCFILE} does not exist."
-        usage
+        echo "Error: Post process file ${POSTPROCFILE} does not exist." >&2
+        exit 1
     fi
 
-    echo "rpicam-hello -t 0 --qt-preview --post-process-file ${POSTPROCFILE} ${SIZE_PARAMS}"
-    rpicam-hello -t 0 --qt-preview --post-process-file "${POSTPROCFILE}" "${SIZE_PARAMS}"
+    echo "rpicam-hello -t 0 --qt-preview --post-process-file ${POSTPROCFILE}" "${SIZE_PARAMS[@]}"
+    rpicam-hello -t 0 --qt-preview --post-process-file "${POSTPROCFILE}" "${SIZE_PARAMS[@]}"
 }
 
 main "$@"

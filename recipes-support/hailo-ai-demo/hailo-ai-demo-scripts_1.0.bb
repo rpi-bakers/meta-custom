@@ -14,6 +14,7 @@ SHELL = "/bin/bash"
 
 RDEPENDS:${PN} += " \
     libcamera-apps \
+    bash \
 "
 
 do_install() {
