@@ -13,9 +13,4 @@ do_install:append() {
 
     #../git/post_processing_stages/hailo/hailo_yolo_inference.cpp:22:10: fatal error: detection/yolo_hailortpp.hpp: No such file or directory
     cp -a "${S}/libs/postprocesses/." "${D}${includedir}/hailo/tappas/"
-
-    # FileExistsError: [Errno 17] File exists:
-    #  'hailo-post-processes/usr/lib/pkgconfig/gsthailometa.pc'
-    #  -> 'libcamera-apps/1.9.0/recipe-sysroot/usr/lib/pkgconfig/gsthailometa.pc'
-    rm -f "${D}${libdir}/pkgconfig/gsthailometa.pc"
 }
