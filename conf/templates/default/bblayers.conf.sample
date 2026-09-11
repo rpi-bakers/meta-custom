@@ -44,9 +44,18 @@ BBLAYERS += " \
 "
 
 # browser
+#BBLAYERS += " \
+#  ##OEROOT##/../meta-browser/meta-chromium \
+#  ##OEROOT##/../meta-clang \
+#  ##OEROOT##/../meta-lts-mixins \
+#"
+
+BBMASK += " \
+  ##OEROOT##/../meta-custom/recipes-browser/chromium/chromium-x11_138.0.7204.157.bbappend \
+"
+
+# u-boot
 BBLAYERS += " \
-  ##OEROOT##/../meta-browser/meta-chromium \
-  ##OEROOT##/../meta-clang \
   ##OEROOT##/../meta-lts-mixins \
 "
 
