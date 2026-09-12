@@ -43,17 +43,6 @@ BBLAYERS += " \
   ##OEROOT##/../meta-mono \
 "
 
-# browser
-#BBLAYERS += " \
-#  ##OEROOT##/../meta-browser/meta-chromium \
-#  ##OEROOT##/../meta-clang \
-#  ##OEROOT##/../meta-lts-mixins \
-#"
-
-BBMASK += " \
-  ##OEROOT##/../meta-custom/recipes-browser/chromium/chromium-x11_138.0.7204.157.bbappend \
-"
-
 # u-boot
 BBLAYERS += " \
   ##OEROOT##/../meta-lts-mixins \
@@ -67,11 +56,4 @@ BBLAYERS += " \
 # java
 BBLAYERS += " \
   ##OEROOT##/../meta-openjdk-temurin \
-"
-
-# Hailo AI (official meta-hailo Yocto integration)
-BBLAYERS += " \
-  ##OEROOT##/../meta-hailo/meta-hailo-accelerator \
-  ##OEROOT##/../meta-hailo/meta-hailo-libhailort \
-  ##OEROOT##/../meta-hailo/meta-hailo-tappas \
 "

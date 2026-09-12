@@ -125,37 +125,6 @@ IMAGE_INSTALL:append = " \
     \
 "
 
-################################################################################
-# HailoRT
-IMAGE_INSTALL:append = " \
-    libhailort \
-    hailortcli \
-    libgsthailo \
-    hailo-pci \
-    hailo-firmware \
-"
-
-################################################################################
-# Tappas
-IMAGE_INSTALL:append = " \
-    libgsthailotools \
-    hailo-post-processes \
-    tappas-tracers \
-"
-
-################################################################################
-# HailoRT python
-IMAGE_INSTALL:append = " \
-    pyhailort \
-"
-
-###############################################################################
-# Hailo AI + Raspberry Pi camera Demo Apps
-IMAGE_INSTALL:append = " \
-    hailo-ai-demo-scripts \
-    libcamera-apps \
-"
-
 ###############################################################################
 # development tools
 IMAGE_INSTALL:append = " \
@@ -175,9 +144,3 @@ PREFERRED_PROVIDER_virtual/psplash = "plymouth"
 IMAGE_INSTALL:append = " \
     plymouth \
 "
-
-###############################################################################
-# web browser : cautuion: chromium is very large size and build time is long.
-#IMAGE_INSTALL:append = " \
-#    chromium-x11 \
-#"
