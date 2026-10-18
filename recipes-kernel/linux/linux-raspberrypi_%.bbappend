@@ -3,4 +3,7 @@
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-SRC_URI:append = " file://disable-in-tree-hailo.cfg"
+SRC_URI:append = " \
+    file://disable-in-tree-hailo.cfg \
+    file://enable-spi.cfg \
+"
