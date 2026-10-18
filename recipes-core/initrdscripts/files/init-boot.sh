@@ -19,6 +19,9 @@ env
 echo "============================================================================="
 echo
 
+# Set terminal size to 120x120 for UART console.
+stty cols 120 rows 120
+
 # UART :login skip
 setsid getty -L -n -l /bin/sh ttyS0 115200 vt100 &
 
