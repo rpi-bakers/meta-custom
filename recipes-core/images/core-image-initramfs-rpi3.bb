@@ -6,6 +6,7 @@ PACKAGE_INSTALL = " \
     ${INITRAMFS_SCRIPTS} \
     busybox \
     base-files \
+    neopixel-demo \
 "
 
 INITRAMFS_IMAGE = ""

@@ -22,6 +22,9 @@ echo
 # Set terminal size to 120x120 for UART console.
 stty cols 120 rows 120
 
+#mount sd card boot partiton
+mount /dev/mmcblk0p1 /mnt
+
 # UART :login skip
 setsid getty -L -n -l /bin/sh ttyS0 115200 vt100 &
 
