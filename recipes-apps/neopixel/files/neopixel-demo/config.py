@@ -1,7 +1,6 @@
-
-# ==================================================================================================
-# User settings
-# ==================================================================================================
+"""
+User settings for NeoPixel demo.
+"""
 
 # --------------------------------------------------------------------------------------------------
 # Device settings
@@ -26,13 +25,22 @@ LED_ON_NUM = 20
 # --------------------------------------------------------------------------------------------------
 # Blink timing
 # --------------------------------------------------------------------------------------------------
-# LOOP_WAIT     | 0 to x.xxxx   | Main loop cycle time [seconds]                |
+# TIME_INTERVAL | 0 to x.xxxx   | Main loop cycle time [seconds]                |
 # CYCLE_SEC     | 0 to x.xx     | Time to stay at current LED position [seconds]|
 # ON_TIME       | 0 to x        | LED ON duration [seconds]                     |
 # OFF_TIME      | 0 to x        | LED OFF duration[seconds]                     |
 # FADE_IN_RATE  | 0 to 100      | Fade-in duration = ON_TIME  * rate / 100      |
 # FADE_OUT_RATE | 0 to 100      | Fade-out duration = OFF_TIME * rate / 100     |
 # MOVE_REVERSE  | True or False | False: forward / True: reverse                |
+# --------------------------------------------------------------------------------------------------
+TIME_INTERVAL = 0.1
+CYCLE_SEC = 0.5
+ON_TIME = 1.5
+OFF_TIME = 0.5
+FADE_IN_RATE = 80
+FADE_OUT_RATE = 80
+MOVE_REVERSE = False
+
 # --------------------------------------------------------------------------------------------------
 # LED Animation Timing Chart
 # --------------------------------------------------------------------------------------------------
@@ -59,10 +67,3 @@ LED_ON_NUM = 20
 #   ●                    ●                    ●                    ●
 # [MOVE_REVERSE =  True] LED 2                LED 1                LED 0
 # =============================================================================
-TIME_INTERVAL = 0.1
-CYCLE_SEC = 0.5
-ON_TIME = 1.5
-OFF_TIME = 0.5
-FADE_IN_RATE = 80
-FADE_OUT_RATE = 80
-MOVE_REVERSE = False

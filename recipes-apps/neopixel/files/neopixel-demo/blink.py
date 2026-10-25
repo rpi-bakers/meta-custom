@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-"""LED blinking application """
+"""
+LED blinking application.
+"""
 
 import time
-
-import led_pattern
 import config as cfg
 
 from led_strip import LedStrip
-from key_input import KeyBoard, QuitRequested
+from key_input import KeyInput
+from config_keybind import ConfigKeyBind, QuitRequested
 from time_keeper import TimeKeeper
 
 # ==================================================================================================
@@ -23,7 +24,6 @@ def main():
     led = LedStrip(
         cfg.LED_NUM,
         cfg.LED_ON_NUM,
-        led_pattern.get_pattern("GRADATION", cfg.LED_ON_NUM),
         cfg.START_POSITION,
         cfg.MAX_BRIGHTNESS,
         cfg.ON_TIME,
@@ -33,22 +33,24 @@ def main():
         cfg.CYCLE_SEC,
     )
     led.set_direction( -1 if cfg.MOVE_REVERSE else 1)
-    keyboard = KeyBoard()
+    keyboard = KeyInput()
     timekeeper = TimeKeeper(cfg.TIME_INTERVAL, led.on_time_interval)
+    keyconfig = ConfigKeyBind(led)
 
     try:
         led.clear()
         timekeeper.start()
+        led.print_params(0)
 
         while True:
             key = keyboard.read()
-            led.handle_params_change_key(key)
-            new_pattern = led_pattern.get_pattern(key, led.led_on_num)
-            led.print_params()
-            if new_pattern is not None:
-                led.pattern = new_pattern
-
-            time.sleep(cfg.TIME_INTERVAL / 2)
+            function = keyconfig.functions.get(key, None)
+            led.print_params(timekeeper.elapsed_time)
+            if function is not None:
+                timekeeper.stop()
+                function()
+                timekeeper.start()
+                print(f"{key} ", end="", flush=True)
 
     except (KeyboardInterrupt, QuitRequested):
         pass
@@ -64,5 +66,6 @@ def main():
             finally:
                 led.clear()
 
+# ==================================================================================================
 if __name__ == "__main__":
     main()
