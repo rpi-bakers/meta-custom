@@ -3,9 +3,17 @@
 import colorsys
 import math
 import random
+import config_pattern as cfg
 from numbers import Real
 
-# High-contrast color palette
+KEY_CONFIG = {
+    "GRADATION":    "1",
+    "RAINBOW":      "2",
+    "RANDOM":       "3",
+}
+
+
+# primary color palette
 PRIMARY_COLORS = [
     (255, 0, 0),       # Red
     (255, 128, 0),     # Orange
@@ -16,6 +24,35 @@ PRIMARY_COLORS = [
     (128, 0, 255),     # Purple
     (255, 0, 255),     # Magenta
 ]
+
+def match_key_or_value(key, value):
+    """Return whether a key or mode name matches the requested mode."""
+    mode = str(value).upper()
+    return key == mode or key == KEY_CONFIG.get(mode)
+
+def get_pattern(key, led_on_num) -> list | None:
+    """
+    Set the LED pattern based on the key pressed.
+    Args:
+        key (str): The key pressed.
+        led_on_num (int): The number of LEDs to use.
+    """
+    if match_key_or_value(key, "GRADATION"):
+        pattern = generate_gradation(
+            led_on_num, cfg.START_COLOR, cfg.END_COLOR
+        )
+    elif match_key_or_value(key, "RAINBOW"):
+        pattern = generate_rainbow(
+            led_on_num, cfg.RAINBOW_START_COLOR, cfg.RAINBOW_END_COLOR
+        )
+    elif match_key_or_value(key, "RANDOM"):
+        pattern = generate_random(
+            led_on_num, cfg.RANDOM_COLOR_NUM, cfg.RANDOM_LED_ON_RATE, cfg.PRIMARY_COLOR_RATE
+        )
+    else:
+        pattern = None
+
+    return pattern
 
 def _validate_color(color, name):
     if not isinstance(color, (list, tuple)) or len(color) != 3:
@@ -45,60 +82,7 @@ def _validate_pattern(pattern):
     for index, color in enumerate(pattern):
         _validate_color(color, f"pattern[{index}]")
 
-def hsl_to_rgb(hue, saturation=1, brightness=1):
-    """
-    Convert a hue, saturation, and brightness value to an RGB color.
-
-    Args:
-        hue: Hue angle in degrees.
-        saturation: Saturation from 0.0 to 1.0.
-        brightness: Brightness from 0.0 to 1.0.
-
-    Returns:
-        An RGB tuple with channels in the range 0 to 255.
-    """
-    hue = hue % 360
-    _hi = int((hue/60)%6)
-    _f = hue / 60.0 - _hi
-    _p = brightness * (1 - saturation)
-    _q = brightness * (1 - _f * saturation)
-    _t = brightness * (1 - (1 - _f) * saturation)
-
-    _r_val = 0
-    _g_val = 0
-    _b_val = 0
-
-    if _hi == 0:
-        _r_val = brightness
-        _g_val = _t
-        _b_val = _p
-    if _hi == 1:
-        _r_val = _q
-        _g_val = brightness
-        _b_val = _p
-    if _hi == 2:
-        _r_val = _p
-        _g_val = brightness
-        _b_val = _t
-    if _hi == 3:
-        _r_val = _p
-        _g_val = _q
-        _b_val = brightness
-    if _hi == 4:
-        _r_val = _t
-        _g_val = _p
-        _b_val = brightness
-    if _hi == 5:
-        _r_val = brightness
-        _g_val = _p
-        _b_val = _q
-
-    r = int(_r_val * 255)
-    g = int(_g_val * 255)
-    b = int(_b_val * 255)
-    return (r, g, b)
-
-def adjust_led_brightness(
+def adjust_led_pattern(
     pattern,
     elapsed_time,
     max_brightness,
@@ -127,6 +111,7 @@ def adjust_led_brightness(
     _validate_time(elapsed_time, "elapsed_time")
     _validate_time(on_time, "on_time")
     _validate_time(off_time, "off_time")
+
     for rate, name in (
         (max_brightness, "max_brightness"),
         (on_fade_rate, "on_fade_rate"),
@@ -145,7 +130,9 @@ def adjust_led_brightness(
             if fade_in_time == 0
             else min(1.0, elapsed_time / fade_in_time)
         )
+
         brightness *= max_brightness / 100
+
         return [
             tuple(int(channel * brightness) for channel in color)
             for color in pattern
@@ -153,6 +140,7 @@ def adjust_led_brightness(
 
     cycle_time = on_time + off_time
     cycle_position = elapsed_time % cycle_time
+
     if cycle_position < on_time:
         fade_in_time = on_time * on_fade_rate / 100
         brightness = (
@@ -170,6 +158,7 @@ def adjust_led_brightness(
         )
 
     brightness *= max_brightness / 100
+
     adjusted_pattern = [
         tuple(int(channel * brightness) for channel in color)
         for color in pattern
@@ -178,7 +167,10 @@ def adjust_led_brightness(
     return adjusted_pattern
 
 
-def generate_gradation_pattern(led_on_num, start_color, end_color):
+def generate_gradation(
+        led_on_num,
+        start_color,
+        end_color):
     """
     Generate a linear RGB gradient between two colors.
 
@@ -208,7 +200,11 @@ def generate_gradation_pattern(led_on_num, start_color, end_color):
     ]
 
 
-def generate_rainbow_pattern(led_on_num, start_color, end_color):
+def generate_rainbow(
+        led_on_num,
+        start_color,
+        end_color
+):
     """
     Generate an HSV-interpolated color pattern between two RGB colors.
 
@@ -223,6 +219,7 @@ def generate_rainbow_pattern(led_on_num, start_color, end_color):
     _validate_led_count(led_on_num)
     _validate_color(start_color, "start_color")
     _validate_color(end_color, "end_color")
+
     if led_on_num == 0:
         return []
     if led_on_num == 1:
@@ -236,24 +233,25 @@ def generate_rainbow_pattern(led_on_num, start_color, end_color):
     )
     hue_difference = (end_hue - start_hue) % 1.0
 
-    rainbow_pattern = []
+    pattern = []
     for index in range(led_on_num):
         fraction = index / (led_on_num - 1)
         hue = (start_hue + hue_difference * fraction) % 1.0
         saturation = start_saturation + (end_saturation - start_saturation) * fraction
         value = start_value + (end_value - start_value) * fraction
-        rainbow_pattern.append(
+        pattern.append(
             tuple(
                 round(channel * 255)
                 for channel in colorsys.hsv_to_rgb(hue, saturation, value)
             )
         )
-    return rainbow_pattern
 
-def generate_random_pattern(
-    led_num,
-    led_on_rate,
-    color_num,
+    return pattern
+
+def generate_random(
+    led_num = 20,
+    color_num = 16,
+    led_on_rate = 75,
     primary_color_rate=70,
 ):
     """

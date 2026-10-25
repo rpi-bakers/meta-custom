@@ -1,3 +1,5 @@
 .vscode/
 *.bak
-
+.idea/
+.vs/
+__pycache__/
