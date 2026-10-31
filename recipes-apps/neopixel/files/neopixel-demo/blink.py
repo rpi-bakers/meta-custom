@@ -4,7 +4,6 @@
 LED blinking application.
 """
 
-import time
 import config as cfg
 
 from led_strip import LedStrip

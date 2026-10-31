@@ -6,15 +6,8 @@ import math
 import board
 import neopixel_spi
 import led_pattern_gradation
-import led_pattern_rainbow
-import led_pattern_random
-import led_pattern_halloween
 
-from typing import Iterable, Any, Callable
 from led_pattern import LedPattern
-from led_pattern import PatternType
-
-import config_pattern as cfg
 
 # parameter name        step,   min, max
 PARAMS_RANGE = {
@@ -27,28 +20,6 @@ PARAMS_RANGE = {
     "fade_out_rate":    (1,       0, 100),
     "interval_sec":     (0.01, 0.01, 10.0),
     "start_position":   (1,       0, None),
-}
-
-GENERATOR: dict[PatternType, Callable[[int], list[tuple[int, int, int]]]] = {
-    PatternType.GRADATION:
-        lambda led_on_num: led_pattern_gradation.generate(
-            led_on_num,
-            cfg.START_COLOR,
-            cfg.END_COLOR),
-
-    PatternType.RAINBOW:
-        lambda led_on_num: led_pattern_rainbow.generate(
-            led_on_num,
-            led_pattern_rainbow.START_COLOR,
-            led_pattern_rainbow.END_COLOR),
-
-    PatternType.RANDOM:
-        lambda led_on_num: led_pattern_random.generate(
-            led_on_num,
-            led_pattern_random.COLOR_NUM,
-            led_pattern_random.LED_ON_RATE,
-            led_pattern_random.PRIMARY_COLOR_RATE),
-
 }
 
 class LedStrip:
@@ -96,8 +67,7 @@ class LedStrip:
 
         self.led_count = led_count
         self.led_on_num = led_on_num
-        self.pattern_type = PatternType.GRADATION
-        self.pattern = GENERATOR.get(PatternType.GRADATION)(self.led_on_num)
+        self.pattern_type = "DEFAULT"
         self.max_brightness = max_brightness
         self.on_time = on_time
         self.off_time = off_time
@@ -110,6 +80,8 @@ class LedStrip:
         self.spi = board.SPI()
         self.parameter_ranges = PARAMS_RANGE
         self.pixels = self.init_neopixel_spi()
+        self.pattern = led_pattern_gradation.generate(led_on_num)
+        self.generator = led_pattern_gradation.generate
         self.clear()
 
     def init_neopixel_spi(self) -> neopixel_spi.NeoPixel_SPI:
@@ -141,29 +113,32 @@ class LedStrip:
         self.pixels.fill(0)
         self.pixels.show()
 
-    def set_pattern(self, pattern_type) -> None:
+    def set_pattern(self, generator, pattern_type = "DEFAULT") -> None:
         """
         set LED lighting pattern.
         Args:
+            generator (dict[PatternType, Callable[[int], list[tuple[int, int, int]]]]): LED pattern generator.
             pattern_type (PatternType): LED pattern type.
         """
-        new_pattern = GENERATOR.get(pattern_type)(self.led_on_num)
+        self.generator = generator
+        new_pattern = self.generator(self.led_on_num, pattern_type)
         if new_pattern is not None:
             self.pattern = new_pattern
             self.pattern_type = pattern_type
 
-    def set_color(self, start_offset: int, pattern:Iterable[Any]) -> None:
+    def set_color(self, start_offset, pattern) -> None:
         """
         set LED color.
         Args:
             start_offset (int): start light ON position.
-            pattern (LED pattern array): LED pattern.
+            pattern (list[tuple[int, int, int]]): LED pattern.
         """
         self.pixels.fill(0)
 
         colors = self.pattern if pattern is None else pattern
-        for offset, color in enumerate(colors):
-            self.pixels[(start_offset + offset) % self.led_count] = color
+        if colors is not None:
+            for offset, color in enumerate(colors):
+                self.pixels[(start_offset + offset) % self.led_count] = color
 
         self.pixels.show()
 
@@ -201,22 +176,22 @@ class LedStrip:
 
         self.set_color(self.start_position, adjusted_pattern)
 
-    def change_parameter(self, parameter, direction) -> None:
+    def change_parameter(self, param, direction) -> None:
         """
         Change specific LED parameter.
         Args:
-            parameter (str): LED parameter variables name.
+            param (str): LED parameter variables name.
             direction (int): The direction of change (positive or negative).
         """
 
-        if parameter not in self.parameter_ranges:
+        if param not in self.parameter_ranges:
             return
 
-        step, min_value, max_value = self.parameter_ranges[parameter]
-        current_value = getattr(self, parameter)
+        step, min_value, max_value = self.parameter_ranges[param]
+        current_value = getattr(self, param)
         new_value = current_value + step * direction
 
-        if parameter == "start_position":
+        if param == "start_position":
             max_value = self.led_count - 1
 
         # Round to the max and min values
@@ -226,7 +201,22 @@ class LedStrip:
             new_value = min(max_value, new_value)
 
         # set value
-        setattr(self, parameter, new_value)
+        setattr(self, param, new_value)
+
+    def inc_led_on_num(self, direction):
+        """
+        If led_on_num is changed, need to update pattern.
+        """
+        self.change_parameter("led_on_num", direction)
+        self.set_pattern(self.generator, self.pattern_type)
+
+    def inc_led_count(self, direction):
+        """
+        If led_count is changed, NeoPixel_SPI needs to be reinitialized.
+        """
+        self.change_parameter("led_count", direction)
+        self.clear()
+        self.pixels = self.init_neopixel_spi()
 
     def print_params(self, elapsed_time) -> None:
         """

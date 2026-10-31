@@ -2,32 +2,39 @@
 LED gradation color pattern generator.
 """
 
+from enum import StrEnum
 from led_pattern import LedPattern
 
+class PatternType(StrEnum):
+    DEFAULT = "DEFAULT"
+
+GRADATION_DEFAULT = [
+    (255, 0, 0),    # Red    as the starting color
+    (0, 0, 255),    # Purple as the ending color
+]
+
+# --------------------------------------------------------------------------------------------------
+PALETTES = {
+    PatternType.DEFAULT: GRADATION_DEFAULT,
+}
 
 def generate(
         led_on_num,
-        start_color,
-        end_color) -> list[tuple[int, int, int]]:
+        pattern_type= PatternType.DEFAULT
+) -> list[tuple[int, int, int]] | None:
     """
     Generate a linear RGB gradient between two colors.
-
     Args:
         led_on_num (int): Number of LEDs in the returned pattern.
-        start_color (tuple[int, int, int]): RGB color for the first LED.
-        end_color (tuple[int, int, int]): RGB color for the last LED.
-
+        pattern_type (PatternType): LED pattern type.
     Returns:
         A list of RGB tuples interpolated between the endpoint colors.
     """
+    start_color, end_color = LedPattern.get_boundary_colors(PALETTES[pattern_type])
     LedPattern.validate_led_count(led_on_num)
-    LedPattern.validate_color(start_color, "start_color")
-    LedPattern.validate_color(end_color, "end_color")
 
-    if led_on_num == 0:
-        return []
-    if led_on_num == 1:
-        return [tuple(start_color)]
+    if led_on_num == 0: return None
+    if led_on_num == 1: return [start_color]
 
     return [
         tuple(

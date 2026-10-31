@@ -3,14 +3,6 @@ LED color and pattern generation utilities.
 """
 
 import math
-import config_pattern as cfg
-
-from enum import StrEnum
-
-class PatternType(StrEnum):
-    GRADATION = "GRADATION"
-    RAINBOW = "RAINBOW"
-    RANDOM = "RANDOM"
 
 class LedPattern:
     """
@@ -127,6 +119,23 @@ class LedPattern:
         ]
 
         return adjusted_pattern
+
+    @staticmethod
+    def get_boundary_colors(palettes):
+        """
+        Get boundary colors from a list of palettes.
+        Args:
+            palettes (list[tuple[int, int, int]]): List of RGB palettes.
+        Returns:
+            boundary_colors: List of RGB palettes.
+        """
+        start = palettes[0]
+        end = palettes[len(palettes) - 1]
+
+        LedPattern.validate_color(start, "start_color")
+        LedPattern.validate_color(end, "end_color")
+
+        return start, end
 
     ###############################################################################################
     # private

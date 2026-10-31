@@ -5,17 +5,21 @@ LED ramdom color pattern generator.
 import colorsys
 import random
 
+from enum import StrEnum
 from led_pattern import LedPattern
+
+class PatternType(StrEnum):
+    DEFAULT = "DEFAULT"
 
 # --------------------------------------------------------------------------------------------------
 # Random color settings
-# LED_ON_RATE       | 0 to 100                          |  |
-# COLOR_NUM         | 0 < RANDOM_COLOR_NUM < LED_ON_NUM |  |
-# PRIMARY_COLOR_RATE| 0 to 100                          |  |
+# LED_ON_RATE       | 0 to 100                          |
+# COLOR_NUM         | 0 < RANDOM_COLOR_NUM < LED_ON_NUM |
+# PRIMARY_COLOR_RATE| 0 to 100                          |
 # --------------------------------------------------------------------------------------------------
 LED_ON_RATE = 75
-COLOR_NUM = 16
-PRIMARY_COLOR_RATE = 50
+COLOR_NUM = 8
+PRIMARY_COLOR_RATE = 80
 
 PRIMARY_COLORS = [
     (255, 0, 0),    # Red
@@ -28,26 +32,29 @@ PRIMARY_COLORS = [
     (255, 0, 255),  # Magenta
 ]
 
+# --------------------------------------------------------------------------------------------------
+PALETTES = {
+    PatternType.DEFAULT: PRIMARY_COLORS,
+}
+
 def generate(
-    led_num:int = 20,
-    color_num:int = 16,
-    led_on_rate:int = 75,
-    primary_color_rate:int = 70,
-) -> list[tuple[int, int, int]]:
+        led_on_num,
+        pattern_type= PatternType.DEFAULT
+) -> list[tuple[int, int, int]] | None:
     """
     Generate a random color pattern with a target proportion of lit LEDs.
-
     Args:
-        led_num (int): Number of LEDs represented by the returned pattern.
-        led_on_rate (int): Target proportion of lit LEDs, from 0 to 100 percent.
-        color_num (int): Number of candidate colors to generate.
-        primary_color_rate (int): Chance (0-100%) to choose each candidate from
-            PRIMARY_COLORS. Remaining candidates are generated from HSV values.
-
+        led_on_num (int): Number of LEDs in the returned pattern.
+        pattern_type (PatternType): LED pattern type.
     Returns:
         A list of led_num RGB tuples. The number of lit LEDs is rounded to
         the nearest whole LED; unlit LEDs are black.
     """
+    led_num = led_on_num
+    color_num = COLOR_NUM
+    led_on_rate = LED_ON_RATE
+    primary_color_rate = PRIMARY_COLOR_RATE
+    palette = PALETTES[pattern_type]
 
     LedPattern.validate_led_count(led_num)
 
@@ -70,11 +77,9 @@ def generate(
     colors = []
 
     for _ in range(color_num):
-
         # Choose primary colors with the configured probability.
         if random.random() < primary_color_rate / 100:
-            color = random.choice(PRIMARY_COLORS)
-
+            color = random.choice(palette)
         else:
             # Generate a random color outside the primary palette.
             hue = random.uniform(0.0, 360.0)

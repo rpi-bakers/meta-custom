@@ -1,10 +1,15 @@
 """
 Key bindings for NeoPixel demo.
 """
-from led_pattern import PatternType
 
 from led_strip import LedStrip
 from typing import Callable
+
+from led_pattern_rainbow import generate as rbw_generator
+from led_pattern_random import generate as rdm_generator
+from led_pattern_gradation import generate as grd_generator
+from led_pattern_halloween import PatternType as Hw
+from led_pattern_halloween import generate as hlw_generator
 
 class QuitRequested(Exception):
     """Raised when the user presses q."""
@@ -21,11 +26,16 @@ class ConfigKeyBind:
         self._led = led
         self.functions: dict[str, Callable[[], None]] = {
             "q": lambda: self._quit_apps(),
-            "1": lambda: led.set_pattern(PatternType.GRADATION),
-            "2": lambda: led.set_pattern(PatternType.RAINBOW),
-            "3": lambda: led.set_pattern(PatternType.RANDOM),
-            "w": lambda: self._inc_led_on_num(1),
-            "s": lambda: self._inc_led_on_num(-1),
+            "1": lambda: led.set_pattern(grd_generator),
+            "2": lambda: led.set_pattern(rbw_generator),
+            "3": lambda: led.set_pattern(rdm_generator),
+            "4": lambda: led.set_pattern(hlw_generator, Hw.JACK_O_LANTERN),
+            "5": lambda: led.set_pattern(hlw_generator, Hw.WITCH_PORTION),
+            "6": lambda: led.set_pattern(hlw_generator, Hw.VAMPIRE_NIGHT),
+            "7": lambda: led.set_pattern(hlw_generator, Hw.GHOSTLY_MOON),
+            "8": lambda: led.set_pattern(hlw_generator, Hw.BLACK_CAT),
+            "w": lambda: led.inc_led_on_num(1),
+            "s": lambda: led.inc_led_on_num(-1),
             "e": lambda: led.change_parameter("max_brightness", 1),
             "d": lambda: led.change_parameter("max_brightness", -1),
             "r": lambda: led.change_parameter("on_time", 1),
@@ -40,27 +50,14 @@ class ConfigKeyBind:
             "k": lambda: led.change_parameter("interval_sec", -1),
             "o": lambda: led.change_parameter("start_position", 1),
             "l": lambda: led.change_parameter("start_position", -1),
-            "[": lambda: self._inc_led_count(1),
-            "]": lambda: self._inc_led_count(-1),
+            "[": lambda: led.inc_led_count(1),
+            "]": lambda: led.inc_led_count(-1),
         }
 
     ###############################################################################################
     # private
     ###############################################################################################
-    def _inc_led_on_num(self, direction):
-        """
-        If led_on_num is changed, need to update pattern.
-        """
-        self._led.change_parameter("led_on_num", direction)
-        self._led.set_pattern(self._led.pattern_type)
-
-    def _inc_led_count(self, direction):
-        """
-        If led_count is changed, NeoPixel_SPI needs to be reinitialized.
-        """
-        self._led.change_parameter("led_count", direction)
-        self._led.clear()
-        self._led.pixels = self._led.init_neopixel_spi()
-
-    def _quit_apps(self):
+    @staticmethod
+    def _quit_apps():
+        print("quit LED control.")
         raise QuitRequested
