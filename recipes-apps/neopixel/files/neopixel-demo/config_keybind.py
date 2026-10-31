@@ -50,6 +50,8 @@ class ConfigKeyBind:
             "k": lambda: led.change_parameter("interval_sec", -1),
             "o": lambda: led.change_parameter("start_position", 1),
             "l": lambda: led.change_parameter("start_position", -1),
+            "p": lambda: led.inc_freq_count(1),
+            ";": lambda: led.inc_freq_count(-1),
             "[": lambda: led.inc_led_count(1),
             "]": lambda: led.inc_led_count(-1),
         }

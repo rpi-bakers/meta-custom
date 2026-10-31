@@ -20,12 +20,14 @@ PALETTES = {
 
 def generate(
         led_on_num,
+        pattern_freq,
         pattern_type= PatternType.DEFAULT
 ) -> list[tuple[int, int, int]] | None:
     """
     Generate a linear RGB gradient between two colors.
     Args:
         led_on_num (int): Number of LEDs in the returned pattern.
+        pattern_freq (int): Frequency of each patterns in the led_on_num.
         pattern_type (PatternType): LED pattern type.
     Returns:
         A list of RGB tuples interpolated between the endpoint colors.
@@ -38,7 +40,7 @@ def generate(
 
     return [
         tuple(
-            round(start + (end - start) * index / (led_on_num - 1))
+            round(start + (end - start) * ((index * pattern_freq / (led_on_num - 1)) % 1.0))
             for start, end in zip(start_color, end_color)
         )
         for index in range(led_on_num)

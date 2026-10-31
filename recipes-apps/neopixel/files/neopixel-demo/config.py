@@ -20,7 +20,7 @@ MAX_BRIGHTNESS = 5
 # LED_ON_NUM        | 0 to LED_NUM      | The number of LEDs to use.                |
 # --------------------------------------------------------------------------------------------------
 START_POSITION = 0
-LED_ON_NUM = 20
+LED_ON_NUM = 100
 
 # --------------------------------------------------------------------------------------------------
 # Blink timing
@@ -40,6 +40,7 @@ OFF_TIME = 0.5
 FADE_IN_RATE = 80
 FADE_OUT_RATE = 80
 MOVE_REVERSE = False
+PATTERN_FREQ = 10
 
 # --------------------------------------------------------------------------------------------------
 # LED Animation Timing Chart

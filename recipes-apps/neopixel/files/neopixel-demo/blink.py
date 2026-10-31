@@ -30,6 +30,7 @@ def main():
         cfg.FADE_IN_RATE,
         cfg.FADE_OUT_RATE,
         cfg.CYCLE_SEC,
+        cfg.PATTERN_FREQ,
     )
     led.set_direction( -1 if cfg.MOVE_REVERSE else 1)
     keyboard = KeyInput()

@@ -25,14 +25,17 @@ PALETTES = {
 
 def generate(
         led_on_num,
-        pattern_type= PatternType.DEFAULT
+        pattern_freq,
+        pattern_type=PatternType.DEFAULT
 ) -> list[tuple[int, int, int]] | None:
     """
     Generate an HSV-interpolated color pattern between two RGB colors.
 
     Args:
         led_on_num (int): Number of LEDs in the returned pattern.
+        pattern_freq (int): Number of gradient repetitions across the LEDs.
         pattern_type (PatternType): LED pattern type.
+
     Returns:
         A list of RGB tuples interpolated between the endpoint colors.
     """
@@ -42,18 +45,28 @@ def generate(
     if led_on_num == 0: return None
     if led_on_num == 1: return [start_color]
 
+    if pattern_freq < 1:
+        raise ValueError("pattern_freq must be greater than or equal to 1")
+
     start_hue, start_saturation, start_value \
         = colorsys.rgb_to_hsv(*(channel / 255 for channel in start_color))
     end_hue, end_saturation, end_value \
         = colorsys.rgb_to_hsv(*(channel / 255 for channel in end_color))
+
     hue_difference = (end_hue - start_hue) % 1.0
 
     pattern = []
     for index in range(led_on_num):
-        fraction = index / (led_on_num - 1)
+        fraction = (index * pattern_freq / (led_on_num - 1)) % 1.0
+
+        # Preserve the endpoint color at the last LED.
+        if index == led_on_num - 1:
+            fraction = 1.0
+
         hue = (start_hue + hue_difference * fraction) % 1.0
         saturation = start_saturation + (end_saturation - start_saturation) * fraction
         value = start_value + (end_value - start_value) * fraction
+
         pattern.append(
             tuple(
                 round(channel * 255)

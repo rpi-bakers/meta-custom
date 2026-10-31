@@ -52,13 +52,15 @@ PALETTES = {
 
 def generate(
         led_on_num,
-        pattern_type = PatternType.JACK_O_LANTERN
+        pattern_freq,
+        pattern_type=PatternType.JACK_O_LANTERN
 ) -> list[tuple[int, int, int]] | None:
     """
-    Generate a linear RGB gradient through multiple colors.
+    Generate a linear RGB gradient through multiple colors and repeat it.
 
     Args:
         led_on_num (int): Number of LEDs in the returned pattern.
+        pattern_freq (int): Number of gradient repetitions across the LEDs.
         pattern_type (PatternType): LED pattern type.
 
     Returns:
@@ -73,17 +75,32 @@ def generate(
     for index, color in enumerate(color_stops):
         LedPattern.validate_color(color, f"color_stops[{index}]")
 
-    if led_on_num == 0: return None
-    if led_on_num == 1: return [color_stops[0]]
+    if led_on_num == 0:
+        return None
+
+    if not isinstance(pattern_freq, int) or isinstance(pattern_freq, bool) or pattern_freq <= 0:
+        raise ValueError("pattern_freq must be a positive integer")
+
+    if led_on_num == 1:
+        return [color_stops[0]]
 
     if len(color_stops) == 1:
         return [tuple(color_stops[0])] * led_on_num
 
-    pattern = []
+    # Number of LEDs in one gradient pattern.
+    pattern_num = (led_on_num + pattern_freq - 1) // pattern_freq
 
-    for index in range(led_on_num):
-        # Position in the color stop sequence.
-        position = index * (len(color_stops) - 1) / (led_on_num - 1)
+    # ------------------------------------------------------------
+    # Generate one gradient pattern.
+    # ------------------------------------------------------------
+
+    random_pattern = []
+
+    for index in range(pattern_num):
+        if pattern_num == 1:
+            position = 0
+        else:
+            position = index * (len(color_stops) - 1) / (pattern_num - 1)
 
         # Find the adjacent color stops.
         segment = min(int(position), len(color_stops) - 2)
@@ -98,6 +115,13 @@ def generate(
             for start, end in zip(start_color, end_color)
         )
 
-        pattern.append(color)
+        random_pattern.append(color)
 
-    return pattern
+    # ------------------------------------------------------------
+    # Repeat the gradient pattern.
+    # ------------------------------------------------------------
+
+    return [
+        random_pattern[position % pattern_num]
+        for position in range(led_on_num)
+    ]

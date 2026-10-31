@@ -13,6 +13,7 @@ from led_pattern import LedPattern
 PARAMS_RANGE = {
     "led_count":        (1,       1, 300),
     "led_on_num":       (1,       1, 300),
+    "pattern_freq":     (1,       1, 50),
     "max_brightness":   (1,       0, 100),
     "on_time":          (0.1,   0.0, 10.0),
     "off_time":         (0.1,   0.0, 10.0),
@@ -36,7 +37,8 @@ class LedStrip:
             off_time,
             fade_in_rate,
             fade_out_rate,
-            interval_sec
+            interval_sec,
+            pattern_freq
     ):
         """
         Initialize LedStrip object.
@@ -50,6 +52,7 @@ class LedStrip:
             fade_in_rate (int): fade in rate
             fade_out_rate (int): fade out rate
             interval_sec (float): cycle time
+            pattern_freq (int): pattern frequency
         """
 
         if not isinstance(led_count, int) or isinstance(led_count, bool) or led_count <= 0:
@@ -80,7 +83,8 @@ class LedStrip:
         self.spi = board.SPI()
         self.parameter_ranges = PARAMS_RANGE
         self.pixels = self.init_neopixel_spi()
-        self.pattern = led_pattern_gradation.generate(led_on_num)
+        self.pattern_freq = pattern_freq
+        self.pattern = led_pattern_gradation.generate(led_on_num, pattern_freq)
         self.generator = led_pattern_gradation.generate
         self.clear()
 
@@ -121,7 +125,7 @@ class LedStrip:
             pattern_type (PatternType): LED pattern type.
         """
         self.generator = generator
-        new_pattern = self.generator(self.led_on_num, pattern_type)
+        new_pattern = self.generator(self.led_on_num, self.pattern_freq , pattern_type)
         if new_pattern is not None:
             self.pattern = new_pattern
             self.pattern_type = pattern_type
@@ -210,6 +214,13 @@ class LedStrip:
         self.change_parameter("led_on_num", direction)
         self.set_pattern(self.generator, self.pattern_type)
 
+    def inc_freq_count(self, direction):
+        """
+        If inc_freq_count is changed, need to update pattern.
+        """
+        self.change_parameter("pattern_freq", direction)
+        self.set_pattern(self.generator, self.pattern_type)
+
     def inc_led_count(self, direction):
         """
         If led_count is changed, NeoPixel_SPI needs to be reinitialized.
@@ -225,17 +236,18 @@ class LedStrip:
             elapsed_time (float): LED parameter variables name.
         """
         print(
-            f"\r{elapsed_time:<4.2f}"
+            f"\r{elapsed_time:<4.1f} "
+            f"P:{self.start_position:<3} ",
             f"LED:{self.led_count:<3} "
-            f"LedOn:{self.led_on_num:<3} "
-            f"Brightness[%]:{self.max_brightness:<3} "
-            f"On[s]:{self.on_time:<4.1f} "
-            f"Off[s]:{self.off_time:<4.1f} "
-            f"FadeIn[%]:{self.fade_in_rate:<3} "
-            f"FadeOut[%]:{self.fade_out_rate:<3} "
-            f"Cycle[s]:{self.interval_sec:<4.2f} "
-            f"Pos:{self.start_position:<3} ",
-            f"Input key:",
+            f"On:{self.led_on_num:<3} "
+            f"Br:{self.max_brightness:<3} "
+            f"On:{self.on_time:<3.1f} "
+            f"Off:{self.off_time:<3.1f} "
+            f"In:{self.fade_in_rate:<3} "
+            f"Out:{self.fade_out_rate:<3} "
+            f"Spd:{self.interval_sec:<4.2f} "
+            f"Freq:{self.pattern_freq:<2} ",
+            f"key:",
             end="",
             flush=True
         )
