@@ -1,0 +1,15 @@
+{
+    "LED_NUM": 164,
+    "LED_ON_NUM": 100,
+    "START_POSITION": 0,
+    "MAX_BRIGHTNESS": 5,
+    "ON_TIME": 1.5,
+    "OFF_TIME": 0.5,
+    "FADE_IN_RATE": 80,
+    "FADE_OUT_RATE": 80,
+    "CYCLE_SEC": 0.5,
+    "TIME_INTERVAL": 0.1,
+    "PATTERN_FREQ": 10,
+    "MOVE_REVERSE": false,
+    "PATTERN": "gradation"
+}

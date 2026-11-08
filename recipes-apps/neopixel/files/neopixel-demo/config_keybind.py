@@ -19,21 +19,33 @@ class ConfigKeyBind:
     key bindings for NeoPixel demo.
     """
 
-    def __init__(self, led: LedStrip):
+    def __init__(self, led: LedStrip, pattern="gradation"):
         """
         init class.
         """
         self._led = led
+        self._patterns = {
+            "gradation": (grd_generator, "DEFAULT"),
+            "rainbow": (rbw_generator, "DEFAULT"),
+            "random": (rdm_generator, "DEFAULT"),
+            "halloween_jack_o_lantern": (hlw_generator, Hw.JACK_O_LANTERN),
+            "halloween_witch_portion": (hlw_generator, Hw.WITCH_PORTION),
+            "halloween_vampire_night": (hlw_generator, Hw.VAMPIRE_NIGHT),
+            "halloween_ghostly_moon": (hlw_generator, Hw.GHOSTLY_MOON),
+            "halloween_black_cat": (hlw_generator, Hw.BLACK_CAT),
+        }
+        self.pattern = "gradation"
+        self._select_pattern(pattern)
         self.functions: dict[str, Callable[[], None]] = {
             "q": lambda: self._quit_apps(),
-            "1": lambda: led.set_pattern(grd_generator),
-            "2": lambda: led.set_pattern(rbw_generator),
-            "3": lambda: led.set_pattern(rdm_generator),
-            "4": lambda: led.set_pattern(hlw_generator, Hw.JACK_O_LANTERN),
-            "5": lambda: led.set_pattern(hlw_generator, Hw.WITCH_PORTION),
-            "6": lambda: led.set_pattern(hlw_generator, Hw.VAMPIRE_NIGHT),
-            "7": lambda: led.set_pattern(hlw_generator, Hw.GHOSTLY_MOON),
-            "8": lambda: led.set_pattern(hlw_generator, Hw.BLACK_CAT),
+            "1": lambda: self._select_pattern("gradation"),
+            "2": lambda: self._select_pattern("rainbow"),
+            "3": lambda: self._select_pattern("random"),
+            "4": lambda: self._select_pattern("halloween_jack_o_lantern"),
+            "5": lambda: self._select_pattern("halloween_witch_portion"),
+            "6": lambda: self._select_pattern("halloween_vampire_night"),
+            "7": lambda: self._select_pattern("halloween_ghostly_moon"),
+            "8": lambda: self._select_pattern("halloween_black_cat"),
             "w": lambda: led.inc_led_on_num(1),
             "s": lambda: led.inc_led_on_num(-1),
             "e": lambda: led.change_parameter("max_brightness", 1),
@@ -59,6 +71,11 @@ class ConfigKeyBind:
     ###############################################################################################
     # private
     ###############################################################################################
+    def _select_pattern(self, pattern):
+        generator, pattern_type = self._patterns[pattern]
+        self._led.set_pattern(generator, pattern_type)
+        self.pattern = pattern
+
     @staticmethod
     def _quit_apps():
         print("quit LED control.")

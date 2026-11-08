@@ -19,23 +19,25 @@ def main():
     Main function to run the LED blink demo.
     """
 
+    settings = cfg.load_settings()
+
     # create object instances
     led = LedStrip(
-        cfg.LED_NUM,
-        cfg.LED_ON_NUM,
-        cfg.START_POSITION,
-        cfg.MAX_BRIGHTNESS,
-        cfg.ON_TIME,
-        cfg.OFF_TIME,
-        cfg.FADE_IN_RATE,
-        cfg.FADE_OUT_RATE,
-        cfg.CYCLE_SEC,
-        cfg.PATTERN_FREQ,
+        settings["LED_NUM"],
+        settings["LED_ON_NUM"],
+        settings["START_POSITION"],
+        settings["MAX_BRIGHTNESS"],
+        settings["ON_TIME"],
+        settings["OFF_TIME"],
+        settings["FADE_IN_RATE"],
+        settings["FADE_OUT_RATE"],
+        settings["CYCLE_SEC"],
+        settings["PATTERN_FREQ"],
     )
-    led.set_direction( -1 if cfg.MOVE_REVERSE else 1)
+    led.set_direction(-1 if settings["MOVE_REVERSE"] else 1)
     keyboard = KeyInput()
-    timekeeper = TimeKeeper(cfg.TIME_INTERVAL, led.on_time_interval)
-    keyconfig = ConfigKeyBind(led)
+    timekeeper = TimeKeeper(settings["TIME_INTERVAL"], led.on_time_interval)
+    keyconfig = ConfigKeyBind(led, settings["PATTERN"])
 
     try:
         led.clear()
@@ -61,10 +63,27 @@ def main():
                 timekeeper.stop()
         finally:
             try:
-                if keyboard is not None:
-                    keyboard.restore_terminal()
+                cfg.save_settings({
+                    "LED_NUM": led.led_count,
+                    "LED_ON_NUM": led.led_on_num,
+                    "START_POSITION": led.start_position,
+                    "MAX_BRIGHTNESS": led.max_brightness,
+                    "ON_TIME": led.on_time,
+                    "OFF_TIME": led.off_time,
+                    "FADE_IN_RATE": led.fade_in_rate,
+                    "FADE_OUT_RATE": led.fade_out_rate,
+                    "CYCLE_SEC": led.interval_sec,
+                    "TIME_INTERVAL": timekeeper.interval,
+                    "PATTERN_FREQ": led.pattern_freq,
+                    "MOVE_REVERSE": led.direction == -1,
+                    "PATTERN": keyconfig.pattern,
+                })
             finally:
-                led.clear()
+                try:
+                    if keyboard is not None:
+                        keyboard.restore_terminal()
+                finally:
+                    led.clear()
 
 # ==================================================================================================
 if __name__ == "__main__":

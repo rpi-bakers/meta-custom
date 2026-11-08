@@ -225,9 +225,16 @@ class LedStrip:
         """
         If led_count is changed, NeoPixel_SPI needs to be reinitialized.
         """
+        previous_count = self.led_count
         self.change_parameter("led_count", direction)
+        if self.led_count == previous_count:
+            return
+
+        self.led_on_num = min(self.led_on_num, self.led_count)
+        self.start_position %= self.led_count
         self.clear()
         self.pixels = self.init_neopixel_spi()
+        self.set_pattern(self.generator, self.pattern_type)
 
     def print_params(self, elapsed_time) -> None:
         """
@@ -247,7 +254,7 @@ class LedStrip:
             f"Out:{self.fade_out_rate:<3} "
             f"Spd:{self.interval_sec:<4.2f} "
             f"Freq:{self.pattern_freq:<2} ",
-            f"key:",
+            "key:",
             end="",
             flush=True
         )
