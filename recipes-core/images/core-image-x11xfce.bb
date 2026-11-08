@@ -16,6 +16,13 @@ GLIBC_GENERATE_LOCALES = "ja_JP.UTF-8 ja_JP.EUC-JP"
 ###############################################################################
 # miscellaneous applications
 IMAGE_INSTALL:append = " \
+    neopixel-demo \
+    neopixelctl \
+"
+
+###############################################################################
+# miscellaneous applications
+IMAGE_INSTALL:append = " \
     xauth \
     \
     sl \
