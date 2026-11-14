@@ -1,0 +1,48 @@
+From 9803a231460b892ba836960b154a98fcb10a8b89 Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Sat, 13 Dec 2025 21:51:52 +0900
+Subject: [PATCH 2/2] fix undefined error
+
+---
+ build/rust/allocator/lib.rs | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/build/rust/allocator/lib.rs b/build/rust/allocator/lib.rs
+index c49d424922..9820f00b18 100644
+--- a/build/rust/allocator/lib.rs
++++ b/build/rust/allocator/lib.rs
+@@ -86,16 +86,24 @@ mod both_allocators {
+     /// As part of rustc's contract for using `#[global_allocator]` without
+     /// rustc-generated shims we must define this symbol, since we are opting in
+     /// to unstable functionality. See https://github.com/rust-lang/rust/issues/123015
+-    #[no_mangle]
++    #[rustc_std_internal_symbol]
+     #[linkage = "weak"]
+-    static __rust_no_alloc_shim_is_unstable: u8 = 0;
+-
+-    // Mangle the symbol name as rustc expects.
++    fn __rust_no_alloc_shim_is_unstable_v2() {}
++    #[cfg(rust_allocator_no_nightly_capability)]
+     #[rustc_std_internal_symbol]
+-    #[allow(non_upper_case_globals)]
+     #[linkage = "weak"]
+-    static __rust_alloc_error_handler_should_panic: u8 = 0;
+-
++    fn __rust_no_alloc_shim_is_unstable() {}
++    #[rustc_std_internal_symbol]
++    #[linkage = "weak"]
++    fn __rust_alloc_error_handler_should_panic_v2() -> u8 {
++        0
++    }
++    #[cfg(rust_allocator_no_nightly_capability)]
++    #[rustc_std_internal_symbol]
++    #[linkage = "weak"]
++    fn __rust_alloc_error_handler_should_panic() -> u8 {
++        0
++    }
+     // Mangle the symbol name as rustc expects.
+     #[rustc_std_internal_symbol]
+     #[allow(non_upper_case_globals)]
+-- 
+2.43.0
+
